@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import AnimatedText from "./text/AnimatedText";
 import img1 from "../assets/images/offer-img-1.jpg";
 import img2 from "../assets/images/offer-img-2.jpg";
 import img3 from "../assets/images/offer-img-3.jpg";
@@ -73,7 +74,11 @@ const Hero = () => {
         </div>
       </div>
       <div className="text-center mt-4">
-        <h1>Your Desire Our Duty</h1>
+        <AnimatedText
+          text="Welcome to Our Shop"
+          className="text-5xl font-bold text-black"
+          delay={10} // milliseconds per letter
+        />
       </div>
     </div>
   );
