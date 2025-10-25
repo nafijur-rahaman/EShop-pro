@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import AnimatedText from "./text/AnimatedText";
-import img1 from "../assets/images/offer-img-1.jpg";
-import img2 from "../assets/images/offer-img-2.jpg";
-import img3 from "../assets/images/offer-img-3.jpg";
+import img1 from "/images/offer-img-1.jpg";
+import img2 from "/images/offer-img-2.jpg";
+import img3 from "/images/offer-img-3.jpg";
 
 const Hero = () => {
   const images = [img1, img2, img3];
