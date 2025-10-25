@@ -2,14 +2,19 @@ import React from "react";
 
 const CardCategories = ({ title, image }) => {
   return (
-    <div className="w-48 bg-white rounded-2xl shadow-lg overflow-hidden m-4 hover:border-b-sky-400 hover:border-b-2 hover:scale-110 transition-transform cursor-pointer">
-      <img
-        src={image}
-        alt={title}
-        className="w-full h-48 object-cover"
-      />
-      <div className="p-4 text-center">
-        <h1 className="text-lg font-semibold text-gray-800 ">{title}</h1>
+    // ✅ Move margin to outer wrapper
+    <div className="w-48 m-4">
+      {/* ✅ Inner card handles hover scale without affecting layout */}
+      <div className="bg-white rounded-2xl shadow-lg overflow-hidden
+                      hover:scale-105 transition-transform transform-gpu cursor-pointer">
+        <img
+          src={image}
+          alt={title}
+          className="w-full h-48 object-cover"
+        />
+        <div className="p-4 text-center">
+          <h1 className="text-lg font-semibold text-gray-800">{title}</h1>
+        </div>
       </div>
     </div>
   );
