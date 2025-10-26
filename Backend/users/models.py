@@ -8,10 +8,10 @@ ROLE_CHOICES = (
 )
 
 class User(AbstractUser):
-    username = models.CharField(max_length=150, unique=True)
+    role = models.CharField(max_length=10, choices=ROLE_CHOICES,default='customer')
     email = models.EmailField(unique=True)
-    role = models.CharField(max_length=10, choices=ROLE_CHOICES, default='customer')
     is_active = models.BooleanField(default=True)
+
 
     def is_admin(self):
         return self.role == 'admin'
