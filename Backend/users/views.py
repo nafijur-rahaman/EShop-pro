@@ -1,9 +1,15 @@
+from django.contrib.auth import authenticate
+import django.utils.timezone as timezone
 from rest_framework import generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.authtoken.models import Token
-from django.contrib.auth import authenticate
+
+# for sending confirmation email
+from django.core.mail import EmailMultiAlternatives
+from django.template.loader import render_to_string
+
 
 
 # importing models and serializers
@@ -25,10 +31,16 @@ class UserRegistrationView(generics.CreateAPIView):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
+        email_subject = "Welcome to EShop Pro"
+        email_body = render_to_string('registration_email.html', {'user': user, 'now': timezone.now()})
+        email = EmailMultiAlternatives(email_subject, '', to=[user.email])
+        email.attach_alternative(email_body, 'text/html')
+        email.send()
         return Response({
             "user": UserRegistrationSerializer(user, context=self.get_serializer_context()).data,
             "message": "User registered successfully."
         }, status=status.HTTP_201_CREATED)
+
      
      
 #----------------------user login----------------------#   
