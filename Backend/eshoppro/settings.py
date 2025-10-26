@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     
     
     #local apps
-    "product"
+    "products"
 ]
 
 MIDDLEWARE = [
