@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router";
 
 const Navbar = () => {
   return (
@@ -6,22 +7,25 @@ const Navbar = () => {
       <div className="max-w-7xl mx-auto flex items-center justify-between p-4">
         {/* Logo */}
         <div>
-          <h1 className="font-bold text-2xl cursor-pointer transform transition-transform duration-300 hover:scale-110">
+          <Link
+            to="/"
+            className="font-bold text-2xl cursor-pointer transform transition-transform duration-300 hover:scale-110"
+          >
             EShopPro
-          </h1>
+          </Link>
         </div>
 
         {/* Navigation Links */}
         <div className="hidden md:flex">
           <ul className="flex space-x-8 text-black font-medium">
             <li className="border-b-2 border-transparent hover:border-black cursor-pointer transform transition-transform hover:-translate-y-1 hover:scale-110">
-              Home
+              <Link to="/">Home</Link>
             </li>
             <li className="border-b-2 border-transparent hover:border-black cursor-pointer transform transition-transform hover:-translate-y-1 hover:scale-110">
-              Category
+              <Link to="Categories">Category</Link>
             </li>
             <li className="border-b-2 border-transparent hover:border-black cursor-pointer transform transition-transform hover:-translate-y-1 hover:scale-110">
-              About
+              <Link to="/about">About</Link>
             </li>
           </ul>
         </div>
@@ -37,10 +41,14 @@ const Navbar = () => {
             Search
           </button>
         </div>
+
         <div>
-          <button className="font-bold border-b-2 border-transparent hover:border-black cursor-pointer transform transition-transform hover:-translate-y-1 hover:scale-110">
+          <Link
+            to="/signup"
+            className="font-bold border-b-2 border-transparent hover:border-black cursor-pointer transform transition-transform hover:-translate-y-1 hover:scale-110"
+          >
             Sign Up
-          </button>
+          </Link>
         </div>
       </div>
     </nav>
