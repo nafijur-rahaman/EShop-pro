@@ -7,7 +7,7 @@ const Footer = () => {
       title: "Company",
       links: [
         { name: "About", href: "/about" },
-        { name: "Catagory", href: "/category" },
+        { name: "Catagory", href: "/catagories" },
         { name: "Brand Center", href: "/brand" },
         { name: "Blog", href: "/blog" },
       ],
