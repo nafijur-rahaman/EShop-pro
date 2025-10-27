@@ -6,12 +6,9 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
-class ImgageClass(models.Model):
-    image= models.ImageField(upload_to="product_images",blank=True, null=True)
 
 class Product(models.Model):
     name = models.CharField(max_length=100)
-    images=models.ManyToManyField(ImgageClass,blank=True)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='products')
     stock_unit = models.PositiveIntegerField(default=0)
@@ -21,3 +18,11 @@ class Product(models.Model):
 
     def __str__(self):
         return self.name
+    
+    
+class ProductImageClass(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='images')
+    image = models.ImageField(upload_to="product_images/")
+
+    def __str__(self):
+        return f"Image for {self.product.name}"
