@@ -15,7 +15,7 @@ const ProductCard = ({ id, title, image, price, rating = 0, sold = 0 }) => {
       {/* ✅ Click handler is now a function, not immediately invoked */}
       <div
         onClick={goToProductDetail}
-        className="bg-white rounded-2xl shadow-lg overflow-hidden 
+        className="bg-white rounded-2xl shadow-lg overflow-hidden hover:bg-amber-600
                    hover:scale-105 transition-transform transform-gpu cursor-pointer"
       >
         {/* ✅ Product image */}
