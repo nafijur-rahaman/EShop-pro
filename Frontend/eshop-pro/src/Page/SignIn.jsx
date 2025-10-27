@@ -1,10 +1,10 @@
 import React, { useState } from "react";
+import { Link } from "react-router";
 
 function SignUpForm() {
   // State to hold the form data
   const [formData, setFormData] = useState({
     userName: "",
-    lastName: "",
     email: "",
     password: "",
     confirmPassword: "",
@@ -36,7 +36,6 @@ function SignUpForm() {
     // Clear the form (optional)
     setFormData({
       userName: "",
-      lastName: "",
       email: "",
       password: "",
       confirmPassword: "",
@@ -48,7 +47,7 @@ function SignUpForm() {
       <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-md">
         {/* Header */}
         <h2 className="text-2xl font-bold text-center text-gray-900">
-          Create Your Account
+          Create Your Account in <span className="text-blue-500">EshopPro</span>
         </h2>
 
         {/* Form */}
@@ -148,7 +147,7 @@ function SignUpForm() {
         <p className="text-sm text-center text-gray-600">
           Already have an account?{" "}
           <a href="#" className="font-medium text-blue-600 hover:underline">
-            Log in
+            <Link to="/login">Log in</Link>
           </a>
         </p>
       </div>

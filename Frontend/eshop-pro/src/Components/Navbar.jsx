@@ -9,7 +9,7 @@ const Navbar = () => {
         <div>
           <Link
             to="/"
-            className="font-bold text-2xl cursor-pointer transform transition-transform duration-300 hover:scale-110"
+            className="font-bold text-blue-500 text-2xl cursor-pointer transform transition-transform duration-300 hover:scale-110"
           >
             EShopPro
           </Link>
