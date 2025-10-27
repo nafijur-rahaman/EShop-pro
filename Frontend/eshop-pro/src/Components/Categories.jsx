@@ -8,7 +8,7 @@ const categoriesData = [
   { id: 4, title: "Accessories", image: "/images/offer-img-3.jpg" },
 ];
 
-const Categories = () => {
+const Categories = ({ onCategoryClick, selectedCategory }) => {
   return (
     <div className="max-w-7xl mx-auto p-4">
       <div className="mb-4 text-center">
@@ -16,13 +16,19 @@ const Categories = () => {
           Categories
         </span>
       </div>
-      <div className="flex flex-wrap justify-center">
+      <div className="flex flex-wrap justify-center gap-4">
         {categoriesData.map((category) => (
-          <CardCatagories
+          <div
             key={category.id}
-            title={category.title}
-            image={category.image}
-          />
+            onClick={() => onCategoryClick && onCategoryClick(category)}
+            className={`cursor-pointer rounded-xl overflow-hidden transition-transform transform hover:scale-105 border-2 ${
+              selectedCategory?.title === category.title
+                ? "border-sky-500"
+                : "border-transparent"
+            }`}
+          >
+            <CardCatagories title={category.title} image={category.image} />
+          </div>
         ))}
       </div>
     </div>

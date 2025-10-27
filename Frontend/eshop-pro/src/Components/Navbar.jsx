@@ -3,7 +3,7 @@ import { Link } from "react-router";
 
 const Navbar = () => {
   return (
-    <nav className="bg-white shadow-md">
+    <nav className="bg-white shadow-md fixed top-0 left-0 right-0 z-100">
       <div className="max-w-7xl mx-auto flex items-center justify-between p-4">
         {/* Logo */}
         <div>
@@ -22,7 +22,7 @@ const Navbar = () => {
               <Link to="/">Home</Link>
             </li>
             <li className="border-b-2 border-transparent hover:border-black cursor-pointer transform transition-transform hover:-translate-y-1 hover:scale-110">
-              <Link to="Categories">Category</Link>
+              <Link to="/catagories">Category</Link>
             </li>
             <li className="border-b-2 border-transparent hover:border-black cursor-pointer transform transition-transform hover:-translate-y-1 hover:scale-110">
               <Link to="/about">About</Link>
