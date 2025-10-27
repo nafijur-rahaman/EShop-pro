@@ -44,12 +44,13 @@ const Navbar = () => {
 
         <div>
           <Link
-            to="/signup"
+            to="/signin"
             className="font-bold border-b-2 border-transparent hover:border-black cursor-pointer transform transition-transform hover:-translate-y-1 hover:scale-110"
           >
             Sign Up
           </Link>
         </div>
+        
       </div>
     </nav>
   );
