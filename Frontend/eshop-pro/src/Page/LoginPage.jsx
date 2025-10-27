@@ -1,38 +1,68 @@
-import React from "react";
-// Using 'react-router-dom' as it's the standard for web applications
-import { Link } from "react-router"; 
+import React, { useState, useContext } from "react";
+import { Link, useNavigate } from "react-router";
+import { AuthContext } from "../Context/AuthContext";
+import { FcGoogle } from "react-icons/fc";
 
 const LoginPage = () => {
+  const { LoginUser, loginWithGoogle } = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({ ...prevData, [name]: value }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      await LoginUser(formData.email, formData.password);
+      navigate("/user");
+    } catch (err) {
+      alert(err.message);
+    }
+  };
+
+  const handleGoogleLogin = async () => {
+    try {
+      await loginWithGoogle();
+      navigate("/user");
+    } catch (err) {
+      alert(err.message);
+    }
+  };
+
   return (
-    // Main wrapper to center the form on the page
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      
-      {/* Form container */}
-      <div className="max-w-md w-full space-y-8 bg-white p-10 shadow-md rounded-2xl">
-        
-        {/* Header */}
-        <div>
-          <h2 className="mt-6 text-center text-3xl font-bold text-gray-900">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-white py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-md w-full space-y-8 bg-white p-10 shadow-xl rounded-3xl">
+        <div className="text-center">
+          <h2 className="text-3xl font-bold text-gray-900">
             Log in to <span className="text-blue-500">EShopPro</span>
           </h2>
+          <p className="mt-2 text-sm text-gray-500">
+            Enter your credentials to access your account
+          </p>
         </div>
 
-        {/* Form */}
-        <form className="mt-8 space-y-6" onSubmit={(e) => e.preventDefault()}>
-          {/* Input fields */}
+        <form onSubmit={handleSubmit} className="mt-8 space-y-6">
           <div className="rounded-2xl shadow-sm -space-y-px">
             <div>
-              <label htmlFor="email-address" className="sr-only">
+              <label htmlFor="email" className="sr-only">
                 Email address
               </label>
               <input
-                id="email-address"
+                id="email"
                 name="email"
                 type="email"
                 autoComplete="email"
                 required
-                // Styles borrowed from your Navbar's search input
-                className="appearance-none relative block w-full px-4 h-10 border border-sky-300 placeholder-gray-500 text-gray-900 rounded-t-2xl focus:outline-none focus:bg-sky-50 sm:text-sm"
+                value={formData.email}
+                onChange={handleChange}
+                className="appearance-none relative block w-full px-4 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-2xl focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 sm:text-sm transition"
                 placeholder="Email address"
               />
             </div>
@@ -46,51 +76,50 @@ const LoginPage = () => {
                 type="password"
                 autoComplete="current-password"
                 required
-                // Styles borrowed from your Navbar's search input
-                className="appearance-none relative block w-full px-4 h-10 border border-sky-300 placeholder-gray-500 text-gray-900 rounded-b-2xl focus:outline-none focus:bg-sky-50 sm:text-sm"
+                value={formData.password}
+                onChange={handleChange}
+                className="appearance-none relative block w-full px-4 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-2xl focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 sm:text-sm transition"
                 placeholder="Password"
               />
             </div>
           </div>
 
-          {/* Forgot password link */}
           <div className="flex items-center justify-end">
-            <div className="text-sm">
-              <Link
-                to="/forgot-password"
-                className="font-medium text-blue-600 hover:text-blue-500"
-              >
-                Forgot your password?
-              </Link>
-            </div>
+            <Link
+              to="/forgot-password"
+              className="text-sm font-medium text-blue-600 hover:text-blue-500"
+            >
+              Forgot your password?
+            </Link>
           </div>
 
-          {/* Submit Button */}
-          <div>
+          <div className="space-y-4">
             <button
               type="submit"
-              // Styles borrowed from your Navbar's search button
-              className="group relative w-full flex justify-center h-10 px-4 border border-transparent text-sm font-bold rounded-2xl text-white bg-blue-500 hover:bg-blue-600 transition-colors duration-200 cursor-pointer"
+              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-bold rounded-2xl text-white bg-blue-500 hover:bg-blue-600 transition duration-200"
             >
               Sign In
+            </button>
+
+            <button
+              type="button"
+              onClick={handleGoogleLogin}
+              className="group relative w-full flex justify-center items-center py-2 px-4 border border-gray-300 text-sm font-bold rounded-2xl text-gray-700 bg-white hover:bg-gray-100 transition duration-200"
+            >
+              <FcGoogle className="mr-2 text-lg" /> Sign in with Google
             </button>
           </div>
         </form>
 
-        {/* Sign Up Link */}
-        <div className="text-sm text-center">
-          <p className="text-gray-600">
-            Don't have an account?{" "}
-            {/* This assumes your Sign Up page is at '/signup' */}
-            <Link
-              to="/signin"
-              className="font-medium text-blue-600 hover:text-blue-500"
-            >
-              Sign Up
-            </Link>
-          </p>
-        </div>
-
+        <p className="mt-6 text-center text-sm text-gray-600">
+          Don't have an account?{" "}
+          <Link
+            to="/signup"
+            className="font-medium text-blue-600 hover:text-blue-500"
+          >
+            Sign Up
+          </Link>
+        </p>
       </div>
     </div>
   );

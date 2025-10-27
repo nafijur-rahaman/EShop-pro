@@ -5,6 +5,7 @@ import JustForYou from "../Components/JustForYou";
 
 
 const Home = () => {
+  console.log("working");
   return <div>
     <Hero />
     <Catagories />
