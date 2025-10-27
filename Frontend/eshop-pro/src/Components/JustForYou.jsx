@@ -1,16 +1,6 @@
 import React from "react";
 import ProductCard from "./card/ProductCard";
-
-const products = [
-  { id: 1, title: "Stylish Shirt", image: "/images/product-1.jpg", price: 29.99, rating: 4, sold:65 },
-  { id: 2, title: "Casual Shoes", image: "/images/product-2.jpg", price: 49.99, rating: 5, sold:65 },
-  { id: 3, title: "Elegant Watch", image: "/images/product-3.jpg", price: 79.99, rating: 3, sold:65 },
-  { id: 4, title: "Leather Bag", image: "/images/product-4.jpg", price: 59.99, rating: 4, sold:65 },
-  { id: 5, title: "Sunglasses", image: "/images/product-5.jpg", price: 19.99, rating: 5, sold:65 },
-  { id: 5, title: "Sunglasses", image: "/images/product-6.jpg", price: 19.99, rating: 5, sold:65 },
-  { id: 5, title: "Sunglasses", image: "/images/product-7.jpg", price: 19.99, rating: 5,sold:65 },
-  { id: 5, title: "Sunglasses", image: "/images/product-8.jpg", price: 19.99, rating: 5, sold:65 },
-];
+import { products } from "../mockProducts";
 
 const JustForYou = () => {
   return (
