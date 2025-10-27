@@ -219,4 +219,6 @@ __marimo__/
 
 .venv
 ./venv/
-./.venvconfig/firebase_credentials.json
+./.venv
+
+config/firebase_credentials.json
