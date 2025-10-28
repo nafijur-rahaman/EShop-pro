@@ -136,13 +136,13 @@ const ProductPage = () => {
             {/* Call to Action (CTA) */}
             <div className="space-y-4">
               <button
-                className="w-full px-8 py-4 bg-indigo-600 text-white font-bold text-lg rounded-xl shadow-lg shadow-indigo-200 hover:bg-indigo-700 transition duration-300 transform hover:scale-[1.01] focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:ring-offset-2"
+                className="w-full px-8 py-4 bg-blue-500 text-white font-bold text-lg rounded-xl shadow-lg shadow-indigo-200 hover:bg-blue-700 transition duration-300 transform hover:scale-[1.01] focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:ring-offset-2 cursor-pointer"
                 onClick={() => console.log(`Adding ${selectedVariant.color} ${mockProduct.name} to cart`)}
               >
                 Add to Cart
               </button>
               <button
-                className="w-full px-8 py-4 bg-white text-indigo-600 font-semibold text-lg rounded-xl border border-indigo-600 hover:bg-indigo-50 transition duration-300 focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:ring-offset-2"
+                className="w-full px-8 py-4 bg-white text-blue-600 font-semibold text-lg rounded-xl border border-blue-600 hover:bg-blue-50 transition duration-300 focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:ring-offset-2 cursor-pointer"
                 onClick={() => alert('Proceeding to Checkout... (In a real app, this would use a modal)')}
               >
                 Buy Now
