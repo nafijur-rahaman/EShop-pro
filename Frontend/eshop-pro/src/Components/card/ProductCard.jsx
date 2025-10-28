@@ -1,13 +1,23 @@
 import React from "react";
-import { Star } from "lucide-react"; // ⭐ Optional: modern icon set (already available in shadcn/lucide)
+import { Star } from "lucide-react"; // Modern icon set
+import { useNavigate } from "react-router";
 
-const ProductCard = ({ title, image, price, rating, sold }) => {
+const ProductCard = ({ id, title, image, price, rating = 0, sold = 0 }) => {
+  const navigate = useNavigate();
+
+  // ✅ Fixed function definition & URL template
+  const goToProductDetail = () => {
+    navigate(`/Product-details/${id}`);
+  };
+
   return (
-    // ✅ Moved margin to outer container to prevent layout shift when scaling
     <div className="w-56 m-4">
-      {/* ✅ Inner card handles hover scale without affecting layout */}
-      <div className="bg-white rounded-2xl shadow-lg overflow-hidden 
-                      hover:scale-105 transition-transform transform-gpu cursor-pointer">
+      {/* ✅ Click handler is now a function, not immediately invoked */}
+      <div
+        onClick={goToProductDetail}
+        className="bg-white rounded-2xl shadow-lg overflow-hidden hover:bg-amber-600
+                   hover:scale-105 transition-transform transform-gpu cursor-pointer"
+      >
         {/* ✅ Product image */}
         <img
           src={image}
@@ -17,22 +27,22 @@ const ProductCard = ({ title, image, price, rating, sold }) => {
 
         {/* ✅ Product info section */}
         <div className="p-4">
-          {/* Product title */}
           <p className="font-semibold text-gray-900 truncate">{title}</p>
 
           {/* ✅ Star rating */}
-          <div className="flex gap-1">
-            <div className="flex items-center mt-1">
-
-            {[...Array(5)].map((_, i) => (
+          <div className="flex gap-1 items-center mt-1">
+            <div className="flex">
+              {[...Array(5)].map((_, i) => (
                 <Star
-                key={i}
-                size={16}
-                className={`${
-                    i < rating ? "fill-yellow-400 text-yellow-400" : "text-gray-300"
-                }`}
+                  key={i}
+                  size={16}
+                  className={
+                    i < rating
+                      ? "fill-yellow-400 text-yellow-400"
+                      : "text-gray-300"
+                  }
                 />
-            ))}
+              ))}
             </div>
             <span className="text-xs text-sky-400">({sold})</span>
           </div>

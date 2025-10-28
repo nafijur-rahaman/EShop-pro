@@ -1,75 +1,45 @@
-from django.contrib.auth import authenticate
-import django.utils.timezone as timezone
-from rest_framework import generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.authtoken.models import Token
-
-# for sending confirmation email
-from django.core.mail import EmailMultiAlternatives
-from django.template.loader import render_to_string
-
-
+from firebase_admin import auth as firebase_auth
 
 # importing models and serializers
 from .models import User
-from .serializers import UserRegistrationSerializer
+from .serializers import UserSerializer
 
 
 
-
-
-
-
-#----------------------user registration----------------------#
-class UserRegistrationView(generics.CreateAPIView):
-    queryset = User.objects.all()
-    serializer_class = UserRegistrationSerializer
-
-    def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        user = serializer.save()
-        email_subject = "Welcome to EShop Pro"
-        email_body = render_to_string('registration_email.html', {'user': user, 'now': timezone.now()})
-        email = EmailMultiAlternatives(email_subject, '', to=[user.email])
-        email.attach_alternative(email_body, 'text/html')
-        email.send()
-        return Response({
-            "user": UserRegistrationSerializer(user, context=self.get_serializer_context()).data,
-            "message": "User registered successfully."
-        }, status=status.HTTP_201_CREATED)
-
-     
-     
-#----------------------user login----------------------#   
-class UserLoginView(APIView):
-    def post(self, request):
-        username = request.data.get('username')
-        password = request.data.get('password')
-        
-        # print(username, password)  # Debugging line
-        user = authenticate(username=username, password=password)
-        if user is not None:
-            token, created = Token.objects.get_or_create(user=user)
-            return Response({
-                "user": UserRegistrationSerializer(user).data,
-                "token": token.key,
-                "message": "Login successful."
-            }, status=status.HTTP_200_OK)
-        else:
-            return Response({"error": "Invalid credentials."}, status=status.HTTP_400_BAD_REQUEST)
-
-
-
-#----------------------user logout----------------------#
-class UserLogoutView(APIView):
-
+class FirebaseLoginView(APIView):
 
     def post(self, request):
+        auth_header = request.headers.get('Authorization')
+        if not auth_header:
+            return Response({"error": "No token provided"}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Extract token
+        token = auth_header.split(' ').pop()
         try:
-            request.user.auth_token.delete()
-            return Response({"message": "Logout successful."}, status=status.HTTP_200_OK)
-        except:
-            return Response({"error": "User not logged in."}, status=status.HTTP_400_BAD_REQUEST)
+            decoded_token = firebase_auth.verify_id_token(token)
+        except Exception as e:
+            return Response({"error": f"Invalid Firebase token: {e}"}, status=status.HTTP_401_UNAUTHORIZED)
+
+        uid = decoded_token.get('uid')
+        email = decoded_token.get('email')
+        display_name = decoded_token.get('name') or decoded_token.get('displayName') or uid
+
+        user, created = User.objects.get_or_create(
+            firebase_uid=uid,
+            defaults={
+                'username': display_name,
+                'first_name': display_name,
+                'email': email or '',
+                'role': 'customer',
+            }
+        )
+
+        serializer = UserSerializer(user)
+        return Response({
+            "user": serializer.data,
+            "created": created,
+            "message": "User authenticated via Firebase"
+        }, status=status.HTTP_200_OK)

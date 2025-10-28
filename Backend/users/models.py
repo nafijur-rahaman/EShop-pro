@@ -8,6 +8,7 @@ ROLE_CHOICES = (
 )
 
 class User(AbstractUser):
+    firebase_uid = models.CharField(max_length=255, unique=True, null=True, blank=True)
     role = models.CharField(max_length=10, choices=ROLE_CHOICES,default='customer')
     email = models.EmailField(unique=True)
     is_active = models.BooleanField(default=True)

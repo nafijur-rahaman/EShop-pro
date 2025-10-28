@@ -2,6 +2,8 @@
 import os
 from pathlib import Path
 from dotenv import load_dotenv
+import firebase_admin
+from firebase_admin import credentials
 
 load_dotenv()
 
@@ -9,8 +11,18 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # print("env", os.getenv("ENV_VARIABLE"))
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+cred_path = os.getenv("FIREBASE_CREDENTIALS_PATH")
+
+if not os.path.exists(cred_path):
+    raise Exception(f"Firebase credentials not found at {cred_path}")
+
+cred = credentials.Certificate(cred_path)
+firebase_admin.initialize_app(cred)
+
+
 
 
 # Quick-start development settings - unsuitable for production
@@ -35,12 +47,12 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     'rest_framework',
     'rest_framework.authtoken',
-      'corsheaders',
-    
-    
-    
-    
-    #local apps
+    'corsheaders',
+
+
+
+
+    # local apps
     "users",
     "products"
 ]
@@ -50,7 +62,7 @@ CORS_ALLOW_CREDENTIALS = True
 
 
 MIDDLEWARE = [
-     'corsheaders.middleware.CorsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -138,9 +150,11 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
+        'users.authentication.FirebaseAuthentication',
         'rest_framework.authentication.TokenAuthentication',
     ],
 }
+
 
 # email setup
 
