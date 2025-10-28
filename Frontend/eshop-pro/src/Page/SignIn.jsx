@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router";
 import { AuthContext } from "../Context/AuthContext";
 // Added: Import for the Google icon
 import { FcGoogle } from "react-icons/fc";
+import Swal from "sweetalert2";
 
 function SignUpForm() {
   // Added: Get loginWithGoogle from the context
@@ -18,16 +19,19 @@ function SignUpForm() {
     confirmPassword: "",
   });
 
+  const [message, setMessage] = useState({ text: "", type: "" });
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({ ...prevData, [name]: value }));
+    setMessage({ text: "", type: "" });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (formData.password !== formData.confirmPassword) {
-      alert("Passwords do not match!");
+      setMessage({ text: "Passwords do not match!", type: "error" });
       return;
     }
 
@@ -38,10 +42,19 @@ function SignUpForm() {
       // Update Firebase profile with display name
       await updateUserProfile(formData.userName, "");
 
-      alert("Sign-up successful! Please log in.");
-      navigate("/login"); // Redirect to login page
+      Swal.fire({
+        title: "Drag me!",
+        icon: "success",
+        text: "Regestration Successfull",
+      });
+
+      navigate("/user");
     } catch (err) {
-      alert(err.message);
+      Swal.fire({
+        icon: "error",
+        title: "Sign up Failed.",
+        text: err.message,
+      });
     }
 
     // Clear form
@@ -61,7 +74,11 @@ function SignUpForm() {
       // so we navigate them directly to their user page.
       navigate("/user");
     } catch (err) {
-      alert(err.message);
+      Swal.fire({
+        icon: "error",
+        title: "Sign up Failed.",
+        text: err.message,
+      });
     }
   };
 
@@ -71,6 +88,18 @@ function SignUpForm() {
         <h2 className="text-2xl font-bold text-center text-gray-900">
           Create Your Account in <span className="text-blue-500">EshopPro</span>
         </h2>
+
+        {message.text && (
+          <div
+            className={`p-3 rounded-md text-center ${
+              message.type === "error"
+                ? "bg-red-100 text-red-600 border border-red-300"
+                : "bg-green-100 text-green-600 border border-green-300"
+            }`}
+          >
+            {message.text}
+          </div>
+        )}
 
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* ... (Your form inputs for userName, email, password, confirmPassword are unchanged) ... */}

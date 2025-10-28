@@ -41,6 +41,7 @@ const AuthContextProvider = ({ children }) => {
       value={{
         user,
         loading,
+        
         RegisterUser,
         updateUserProfile,
         LoginUser,

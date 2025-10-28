@@ -2,6 +2,7 @@ import React, { useState, useContext } from "react";
 import { Link, useNavigate } from "react-router";
 import { AuthContext } from "../Context/AuthContext";
 import { FcGoogle } from "react-icons/fc";
+import Swal from "sweetalert2";
 
 const LoginPage = () => {
   const { LoginUser, loginWithGoogle } = useContext(AuthContext);
@@ -23,7 +24,12 @@ const LoginPage = () => {
       await LoginUser(formData.email, formData.password);
       navigate("/user");
     } catch (err) {
-      alert(err.message);
+      // alert(err.message);
+      Swal.fire({
+        icon: "error",
+        title: "Log in Failed.",
+        text: err.message,
+      });
     }
   };
 
@@ -32,7 +38,12 @@ const LoginPage = () => {
       await loginWithGoogle();
       navigate("/user");
     } catch (err) {
-      alert(err.message);
+      // alert(err.message);
+      Swal.fire({
+        icon: "error",
+        title: "Log in Failed.",
+        text: err.message,
+      });
     }
   };
 
