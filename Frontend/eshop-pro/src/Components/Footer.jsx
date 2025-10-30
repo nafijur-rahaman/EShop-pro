@@ -1,95 +1,154 @@
-import React from 'react';
+import React from "react";
+import { Link } from "react-router";
 
 const Footer = () => {
-    return (
-        <div>
-            <footer className="py-6 dark:bg-gray-100 dark:text-gray-900">
-	<div className="container px-6 mx-auto space-y-6 divide-y dark:divide-gray-600 md:space-y-12 divide-opacity-50">
-		<div className="grid grid-cols-12">
-			<div className="pb-6 col-span-full md:pb-0 md:col-span-6">
-				<a rel="noopener noreferrer" href="#" className="flex justify-center space-x-3 md:justify-start">
-					<div className="flex items-center justify-center w-12 h-12 rounded-full dark:bg-violet-600">
-						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="currentColor" className="flex-shrink-0 w-5 h-5 rounded-full dark:text-gray-50">
-							<path d="M18.266 26.068l7.839-7.854 4.469 4.479c1.859 1.859 1.859 4.875 0 6.734l-1.104 1.104c-1.859 1.865-4.875 1.865-6.734 0zM30.563 2.531l-1.109-1.104c-1.859-1.859-4.875-1.859-6.734 0l-6.719 6.734-6.734-6.734c-1.859-1.859-4.875-1.859-6.734 0l-1.104 1.104c-1.859 1.859-1.859 4.875 0 6.734l6.734 6.734-6.734 6.734c-1.859 1.859-1.859 4.875 0 6.734l1.104 1.104c1.859 1.859 4.875 1.859 6.734 0l21.307-21.307c1.859-1.859 1.859-4.875 0-6.734z"></path>
-						</svg>
-					</div>
-					<span className="self-center text-2xl font-semibold">Brand name</span>
-				</a>
-			</div>
-			<div className="col-span-6 text-center md:text-left md:col-span-3">
-				<p className="pb-1 text-lg font-medium">Category</p>
-				<ul>
-					<li>
-						<a rel="noopener noreferrer" href="#" className="hover:dark:text-violet-600">Link</a>
-					</li>
-					<li>
-						<a rel="noopener noreferrer" href="#" className="hover:dark:text-violet-600">Link</a>
-					</li>
-					<li>
-						<a rel="noopener noreferrer" href="#" className="hover:dark:text-violet-600">Link</a>
-					</li>
-					<li>
-						<a rel="noopener noreferrer" href="#" className="hover:dark:text-violet-600">Link</a>
-					</li>
-					<li>
-						<a rel="noopener noreferrer" href="#" className="hover:dark:text-violet-600">Link</a>
-					</li>
-				</ul>
-			</div>
-			<div className="col-span-6 text-center md:text-left md:col-span-3">
-				<p className="pb-1 text-lg font-medium">Category</p>
-				<ul>
-					<li>
-						<a rel="noopener noreferrer" href="#" className="hover:dark:text-violet-600">Link</a>
-					</li>
-					<li>
-						<a rel="noopener noreferrer" href="#" className="hover:dark:text-violet-600">Link</a>
-					</li>
-					<li>
-						<a rel="noopener noreferrer" href="#" className="hover:dark:text-violet-600">Link</a>
-					</li>
-					<li>
-						<a rel="noopener noreferrer" href="#" className="hover:dark:text-violet-600">Link</a>
-					</li>
-					<li>
-						<a rel="noopener noreferrer" href="#" className="hover:dark:text-violet-600">Link</a>
-					</li>
-				</ul>
-			</div>
-		</div>
-		<div className="grid justify-center pt-6 lg:justify-between">
-			<div className="flex flex-col self-center text-sm text-center md:block lg:col-start-1 md:space-x-6">
-				<span>©2025 All rights reserved</span>
-				<a rel="noopener noreferrer" href="#">
-					<span>Privacy policy</span>
-				</a>
-				<a rel="noopener noreferrer" href="#">
-					<span>Terms of service</span>
-				</a>
-			</div>
-			<div className="flex justify-center pt-4 space-x-4 lg:pt-0 lg:col-end-13">
-				<a rel="noopener noreferrer" href="#" title="Email" className="flex items-center justify-center w-10 h-10 rounded-full dark:bg-violet-600 dark:text-gray-50">
-					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5">
-						<path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"></path>
-						<path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"></path>
-					</svg>
-				</a>
-				<a rel="noopener noreferrer" href="#" title="Twitter" className="flex items-center justify-center w-10 h-10 rounded-full dark:bg-violet-600 dark:text-gray-50">
-					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50" fill="currentColor" className="w-5 h-5">
-						<path d="M 50.0625 10.4375 C 48.214844 11.257813 46.234375 11.808594 44.152344 12.058594 C 46.277344 10.785156 47.910156 8.769531 48.675781 6.371094 C 46.691406 7.546875 44.484375 8.402344 42.144531 8.863281 C 40.269531 6.863281 37.597656 5.617188 34.640625 5.617188 C 28.960938 5.617188 24.355469 10.21875 24.355469 15.898438 C 24.355469 16.703125 24.449219 17.488281 24.625 18.242188 C 16.078125 17.8125 8.503906 13.71875 3.429688 7.496094 C 2.542969 9.019531 2.039063 10.785156 2.039063 12.667969 C 2.039063 16.234375 3.851563 19.382813 6.613281 21.230469 C 4.925781 21.175781 3.339844 20.710938 1.953125 19.941406 C 1.953125 19.984375 1.953125 20.027344 1.953125 20.070313 C 1.953125 25.054688 5.5 29.207031 10.199219 30.15625 C 9.339844 30.390625 8.429688 30.515625 7.492188 30.515625 C 6.828125 30.515625 6.183594 30.453125 5.554688 30.328125 C 6.867188 34.410156 10.664063 37.390625 15.160156 37.472656 C 11.644531 40.230469 7.210938 41.871094 2.390625 41.871094 C 1.558594 41.871094 0.742188 41.824219 -0.0585938 41.726563 C 4.488281 44.648438 9.894531 46.347656 15.703125 46.347656 C 34.617188 46.347656 44.960938 30.679688 44.960938 17.09375 C 44.960938 16.648438 44.949219 16.199219 44.933594 15.761719 C 46.941406 14.3125 48.683594 12.5 50.0625 10.4375 Z"></path>
-					</svg>
-				</a>
-				<a rel="noopener noreferrer" href="#" title="GitHub" className="flex items-center justify-center w-10 h-10 rounded-full dark:bg-violet-600 dark:text-gray-50">
-					<svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" className="w-5 h-5">
-						<path d="M10.9,2.1c-4.6,0.5-8.3,4.2-8.8,8.7c-0.5,4.7,2.2,8.9,6.3,10.5C8.7,21.4,9,21.2,9,20.8v-1.6c0,0-0.4,0.1-0.9,0.1 c-1.4,0-2-1.2-2.1-1.9c-0.1-0.4-0.3-0.7-0.6-1C5.1,16.3,5,16.3,5,16.2C5,16,5.3,16,5.4,16c0.6,0,1.1,0.7,1.3,1c0.5,0.8,1.1,1,1.4,1 c0.4,0,0.7-0.1,0.9-0.2c0.1-0.7,0.4-1.4,1-1.8c-2.3-0.5-4-1.8-4-4c0-1.1,0.5-2.2,1.2-3C7.1,8.8,7,8.3,7,7.6C7,7.2,7,6.6,7.3,6 c0,0,1.4,0,2.8,1.3C10.6,7.1,11.3,7,12,7s1.4,0.1,2,0.3C15.3,6,16.8,6,16.8,6C17,6.6,17,7.2,17,7.6c0,0.8-0.1,1.2-0.2,1.4 c0.7,0.8,1.2,1.8,1.2,3c0,2.2-1.7,3.5-4,4c0.6,0.5,1,1.4,1,2.3v2.6c0,0.3,0.3,0.6,0.7,0.5c3.7-1.5,6.3-5.1,6.3-9.3 C22,6.1,16.9,1.4,10.9,2.1z"></path>
-					</svg>
-				</a>
-			</div>
-		</div>
-	</div>
-</footer>
+  const sections = [
+    {
+      title: "Company",
+      links: [
+        { name: "About", href: "/about" },
+        { name: "Catagory", href: "/catagories" },
+        { name: "Brand Center", href: "/brand" },
+        { name: "Blog", href: "/blog" },
+      ],
+    },
+    {
+      title: "Help Center",
+      links: [
+        { name: "Discord Server", href: "https://discord.gg/example" },
+        { name: "Twitter", href: "https://twitter.com/example" },
+        { name: "Facebook", href: "https://facebook.com/example" },
+        { name: "Contact Us", href: "/contact" },
+      ],
+    },
+    {
+      title: "Legal",
+      links: [
+        { name: "Privacy Policy", href: "/privacy" },
+        { name: "Licensing", href: "/licensing" },
+        { name: "Terms & Conditions", href: "/terms" },
+      ],
+    },
+  ];
+
+  const socials = [
+    {
+      label: "Facebook",
+      href: "https://facebook.com/example",
+      icon: (
+        <path
+          fillRule="evenodd"
+          clipRule="evenodd"
+          d="M6.135 3H8V0H6.135a4.147 4.147 0 0 0-4.142 4.142V6H0v3h2v9.938h3V9h2.021l.592-3H5V3.591A.6.6 0 0 1 5.592 3h.543Z"
+        />
+      ),
+    },
+    {
+      label: "Discord",
+      href: "https://discord.gg/example",
+      icon: (
+        <path d="M16.942 1.556a16.3 16.3 0 0 0-4.126-1.3 12.04 12.04 0 0 0-.529 1.1 15.175 15.175 0 0 0-4.573 0 11.585 11.585 0 0 0-.535-1.1 16.274 16.274 0 0 0-4.129 1.3A17.392 17.392 0 0 0 .182 13.218a15.785 15.785 0 0 0 4.963 2.521c.41-.564.773-1.16 1.084-1.785a10.63 10.63 0 0 1-1.706-.83c.143-.106.283-.217.418-.33a11.664 11.664 0 0 0 10.118 0c.137.113.277.224.418.33-.544.328-1.116.606-1.71.832a12.52 12.52 0 0 0 1.084 1.785 16.46 16.46 0 0 0 5.064-2.595 17.286 17.286 0 0 0-2.973-11.59ZM6.678 10.813a1.941 1.941 0 0 1-1.8-2.045 1.93 1.93 0 0 1 1.8-2.047 1.919 1.919 0 0 1 1.8 2.047 1.93 1.93 0 0 1-1.8 2.045Zm6.644 0a1.94 1.94 0 0 1-1.8-2.045 1.93 1.93 0 0 1 1.8-2.047 1.918 1.918 0 0 1 1.8 2.047 1.93 1.93 0 0 1-1.8 2.045Z" />
+      ),
+    },
+    {
+      label: "Twitter",
+      href: "https://twitter.com/example",
+      icon: (
+        <path
+          fillRule="evenodd"
+          clipRule="evenodd"
+          d="M20 1.892a8.178 8.178 0 0 1-2.355.635 4.074 4.074 0 0 0 1.8-2.235 8.344 8.344 0 0 1-2.605.98A4.13 4.13 0 0 0 13.85 0a4.068 4.068 0 0 0-4.1 4.038 4 4 0 0 0 .105.919A11.705 11.705 0 0 1 1.4.734a4.006 4.006 0 0 0 1.268 5.392 4.165 4.165 0 0 1-1.859-.5v.05A4.057 4.057 0 0 0 4.1 9.635a4.19 4.19 0 0 1-1.856.07 4.108 4.108 0 0 0 3.831 2.807A8.36 8.36 0 0 1 0 14.184 11.732 11.732 0 0 0 6.291 16 11.502 11.502 0 0 0 17.964 4.5c0-.177 0-.35-.012-.523A8.143 8.143 0 0 0 20 1.892Z"
+        />
+      ),
+    },
+    {
+      label: "GitHub",
+      href: "https://github.com/example",
+      icon: (
+        <path
+          fillRule="evenodd"
+          clipRule="evenodd"
+          d="M10 .333A9.911 9.911 0 0 0 6.866 19.65c.5.092.678-.215.678-.477 0-.237-.01-1.017-.014-1.845-2.757.6-3.338-1.169-3.338-1.169a2.627 2.627 0 0 0-1.1-1.451c-.9-.615.07-.6.07-.6a2.084 2.084 0 0 1 1.518 1.021 2.11 2.11 0 0 0 2.884.823c.044-.503.268-.973.63-1.325-2.2-.25-4.516-1.1-4.516-4.9A3.832 3.832 0 0 1 4.7 7.068a3.56 3.56 0 0 1 .095-2.623s.832-.266 2.726 1.016a9.409 9.409 0 0 1 4.962 0c1.89-1.282 2.717-1.016 2.717-1.016.366.83.402 1.768.1 2.623a3.827 3.827 0 0 1 1.02 2.659c0 3.807-2.319 4.644-4.525 4.889a2.366 2.366 0 0 1 .673 1.834c0 1.326-.012 2.394-.012 2.72 0 .263.18.572.681.475A9.911 9.911 0 0 0 10 .333Z"
+        />
+      ),
+    },
+  ];
+
+  // Helper: Detect if link is external
+  const isExternal = (url) => /^https?:\/\//.test(url);
+
+  return (
+    <footer className="bg-white shadow-[0_-4px_10px_rgba(0,0,0,0.1)]">
+      <div className="mx-auto w-full max-w-7xl">
+        {/* Section links */}
+        <div className="grid grid-cols-2 gap-8 px-4 py-6 md:grid-cols-3 lg:py-8">
+          {sections.map(({ title, links }) => (
+            <div key={title}>
+              <h2 className="mb-6 text-sm font-bold underline text-gray-900 uppercase">
+                {title}
+              </h2>
+              <ul className="text-gray-500 font-medium space-y-4">
+                {links.map(({ name, href }) => (
+                  <li key={name}>
+                    {isExternal(href) ? (
+                      <a
+                        href={href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-block transition-transform transform hover:scale-110 hover:text-gray-900 hover:underline"
+                      >
+                        {name}
+                      </a>
+                    ) : (
+                      <Link
+                        to={href}
+                        className="inline-block transition-transform transform hover:scale-110 hover:text-gray-900 hover:underline"
+                      >
+                        {name}
+                      </Link>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
         </div>
-    );
+
+        {/* Bottom bar */}
+        <div className="px-4 py-6 bg-gray-100 flex flex-col md:flex-row items-center justify-between shadow-md">
+          <span className="text-sm text-gray-500 sm:text-center">
+            © {new Date().getFullYear()}{" "}
+            <Link to="/" className="hover:underline font-medium text-gray-700">
+              EshopPro
+            </Link>
+            . All rights reserved.
+          </span>
+
+          <div className="flex mt-4 md:mt-0 space-x-5 rtl:space-x-reverse">
+            {socials.map(({ label, href, icon }) => (
+              <a
+                key={label}
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gray-400 hover:text-gray-900 transition-colors"
+                aria-label={label}
+              >
+                <svg
+                  className="w-4 h-4"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  {icon}
+                </svg>
+              </a>
+            ))}
+          </div>
+        </div>
+      </div>
+    </footer>
+  );
 };
 
 export default Footer;
