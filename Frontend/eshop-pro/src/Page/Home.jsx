@@ -1,15 +1,11 @@
-import React from "react";
-import Hero from "../Components/Hero";
-import Catagories from "../Components/Categories";
-import JustForYou from "../Components/JustForYou";
-
+import React from 'react';
 
 const Home = () => {
-  return <div>
-    <Hero />
-    <Catagories />
-    <JustForYou />
-  </div>;
+    return (
+        <div>
+            <h1>This is home</h1>
+        </div>
+    );
 };
 
 export default Home;
