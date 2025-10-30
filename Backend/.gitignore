@@ -58,7 +58,8 @@ cover/
 # Django stuff:
 *.log
 local_settings.py
-
+db.sqlite3
+db.sqlite3-journal
 
 # Flask stuff:
 instance/
@@ -214,9 +215,7 @@ __marimo__/
 # Streamlit
 .streamlit/secrets.toml
 
-**/migrations/
-!**/migrations/__init__.py
-
+.migrations/
 .venv
 ./venv/
 ./.venv
