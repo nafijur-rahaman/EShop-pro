@@ -1,54 +1,45 @@
 import React from "react";
-import { Star } from "lucide-react"; // Modern icon set
+import { Star } from "lucide-react";
 import { useNavigate } from "react-router";
 
-const ProductCard = ({ id, name, images, price, stock_unit }) => {
+const ProductCard = ({ id, name, images, price, stock_unit, description }) => {
   const navigate = useNavigate();
 
-  // ✅ Fixed function definition & URL template
   const goToProductDetail = () => {
     navigate(`/Product-details/${id}`);
   };
 
   return (
-    <div className="w-56 m-4">
-      {/* ✅ Click handler is now a function, not immediately invoked */}
+    <div className="w-64 h-96 m-4">
+      {/* Clickable card container */}
       <div
         onClick={goToProductDetail}
-        className="bg-white rounded-2xl shadow-lg overflow-hidden hover:bg-amber-600
-                   hover:scale-105 transition-transform transform-gpu cursor-pointer"
+        className="bg-white rounded-2xl shadow-lg overflow-hidden 
+                   hover:bg-amber-600 hover:scale-105 
+                   transition-transform transform-gpu cursor-pointer flex flex-col"
       >
-        {/* ✅ Product image */}
-        {/* <img
-          src={images[0]}
-          alt={name}
-          className="w-full h-52 object-cover"
-        /> */}
+        {/* PRODUCT IMAGE */}
+        <div className="w-full h-40 overflow-hidden flex-shrink-0">
+          <img
+            src={images}
+            alt={name}
+            className="w-full h-full object-cover"
+          />
+        </div>
 
-        {/* ✅ Product info section */}
-        <div className="p-4">
+        {/* PRODUCT INFO */}
+        <div className="p-4 flex flex-col flex-1">
+          {/* Product name */}
           <p className="font-semibold text-gray-900 truncate">{name}</p>
 
-          {/* ✅ Star rating */}
-          {/* <div className="flex gap-1 items-center mt-1">
-            <div className="flex">
-              {[...Array(5)].map((_, i) => (
-                <Star
-                  key={i}
-                  size={16}
-                  className={
-                    i < rating
-                      ? "fill-yellow-400 text-yellow-400"
-                      : "text-gray-300"
-                  }
-                />
-              ))}
-            </div>
-            <span className="text-xs text-sky-400">({sold})</span>
-          </div> */}
+          {/* Stock info */}
+          <span className="text-xs text-sky-400 mt-1">In Stock: {stock_unit}</span>
 
-          {/* ✅ Price */}
-          <div className="mt-2">
+          {/* Description */}
+          <p className="text-sm text-gray-500 mt-2 line-clamp-2 flex-1">{description}</p>
+
+          {/* Price */}
+          <div className="mt-3">
             <span className="text-lg font-bold text-sky-600">${price}</span>
           </div>
         </div>

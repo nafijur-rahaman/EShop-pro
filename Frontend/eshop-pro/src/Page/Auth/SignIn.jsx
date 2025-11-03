@@ -1,7 +1,7 @@
 import React, { useState, useContext } from "react";
 // Corrected: Imports should come from 'react-router-dom' for web
 import { Link, useNavigate } from "react-router";
-import { AuthContext } from "../Context/AuthContext";
+import { AuthContext } from "../../Context/AuthContext";
 // Added: Import for the Google icon
 import { FcGoogle } from "react-icons/fc";
 import Swal from "sweetalert2";

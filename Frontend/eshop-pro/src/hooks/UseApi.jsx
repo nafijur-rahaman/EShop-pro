@@ -12,7 +12,7 @@ export const useApi = () => {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
-  const api = axios.create({ baseURL: BASE_URL });
+  const api = axios.create({ baseURL: BASE_URL });~
 
   // Add token to headers automatically
   api.interceptors.request.use((config) => {
