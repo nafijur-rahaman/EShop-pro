@@ -73,6 +73,8 @@ const Hero = () => {
           ))}
         </div>
       </div>
+
+      {/* Animated text */}
       <div className="text-center mt-4">
         <AnimatedText
           text="Welcome to Our Shop"
