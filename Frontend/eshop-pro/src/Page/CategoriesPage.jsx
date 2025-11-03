@@ -4,7 +4,7 @@ import Categories from "../Components/Categories";
 import { products } from "../mockProducts";
 import ProductCard from "../Components/card/ProductCard";
 
-function CatagoriesPage() {
+function CategoriesPage() {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const selectedCategoryParam = queryParams.get("selected");
@@ -60,4 +60,4 @@ function CatagoriesPage() {
   );
 }
 
-export default CatagoriesPage;
+export default CategoriesPage;
