@@ -22,7 +22,7 @@ const Navbar = () => {
               <Link to="/">Home</Link>
             </li>
             <li className="border-b-2 border-transparent hover:border-black cursor-pointer transform transition-transform hover:-translate-y-1 hover:scale-110">
-              <Link to="/catagories">Category</Link>
+              <Link to="/categories">Category</Link>
             </li>
             <li className="border-b-2 border-transparent hover:border-black cursor-pointer transform transition-transform hover:-translate-y-1 hover:scale-110">
               <Link to="/about">About</Link>
