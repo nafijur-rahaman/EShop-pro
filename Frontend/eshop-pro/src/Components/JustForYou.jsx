@@ -1,8 +1,31 @@
-import React from "react";
+import React, {  useContext, useEffect, useState } from "react";
 import ProductCard from "./card/ProductCard";
-import { products } from "../mockProducts";
+import { useApi } from "../hooks/UseApi.jsx";
+import { AuthContext } from "../Context/AuthContext";
 
 const JustForYou = () => {
+  const [products, setAllProducts] = useState([]);
+const {loading} = useContext(AuthContext);
+  const { get } = useApi();
+
+  useEffect(() => {
+    const fetchPackages = async () => {
+      try {
+        const response = await get("/products/");
+        console.log(response)
+        setAllProducts(response);
+      } catch (error) {
+        console.error("Error fetching packages:", error);
+      }
+    };
+    fetchPackages();
+  }, [loading]);
+
+  console.log(products);
+
+
+
+
   return (
     <div className="max-w-7xl mx-auto p-6">
       <div className="text-center mb-6">
@@ -14,13 +37,7 @@ const JustForYou = () => {
       <div className="flex flex-wrap justify-center">
         {products.map((product) => (
           <ProductCard
-            key={product.id}
-            id={product.id}
-            title={product.title}
-            image={product.image}
-            price={product.price}
-            rating={product.rating}
-            sold={product.sold}
+            
           />
         ))}
       </div>

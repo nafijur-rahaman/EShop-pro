@@ -2,7 +2,7 @@ import React from "react";
 import { Star } from "lucide-react"; // Modern icon set
 import { useNavigate } from "react-router";
 
-const ProductCard = ({ id, title, image, price, rating = 0, sold = 0 }) => {
+const ProductCard = ({ id, name, images, price, stock_unit }) => {
   const navigate = useNavigate();
 
   // ✅ Fixed function definition & URL template
@@ -19,18 +19,18 @@ const ProductCard = ({ id, title, image, price, rating = 0, sold = 0 }) => {
                    hover:scale-105 transition-transform transform-gpu cursor-pointer"
       >
         {/* ✅ Product image */}
-        <img
-          src={image}
-          alt={title}
+        {/* <img
+          src={images[0]}
+          alt={name}
           className="w-full h-52 object-cover"
-        />
+        /> */}
 
         {/* ✅ Product info section */}
         <div className="p-4">
-          <p className="font-semibold text-gray-900 truncate">{title}</p>
+          <p className="font-semibold text-gray-900 truncate">{name}</p>
 
           {/* ✅ Star rating */}
-          <div className="flex gap-1 items-center mt-1">
+          {/* <div className="flex gap-1 items-center mt-1">
             <div className="flex">
               {[...Array(5)].map((_, i) => (
                 <Star
@@ -45,7 +45,7 @@ const ProductCard = ({ id, title, image, price, rating = 0, sold = 0 }) => {
               ))}
             </div>
             <span className="text-xs text-sky-400">({sold})</span>
-          </div>
+          </div> */}
 
           {/* ✅ Price */}
           <div className="mt-2">
