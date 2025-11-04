@@ -1,8 +1,10 @@
 import React, { useContext } from "react";
-import { AuthContext } from "../Context/AuthContext";
+import { AuthContext } from "../../Context/AuthContext";
 
 const UserPage = () => {
-  const { user } = useContext(AuthContext);
+  const { user,token} = useContext(AuthContext);
+  console.log(token)
+
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen">

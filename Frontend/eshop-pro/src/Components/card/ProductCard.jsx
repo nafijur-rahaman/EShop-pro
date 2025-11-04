@@ -1,54 +1,43 @@
 import React from "react";
-import { Star } from "lucide-react"; // Modern icon set
 import { useNavigate } from "react-router";
 
-const ProductCard = ({ id, title, image, price, rating = 0, sold = 0 }) => {
+const ProductCard = ({ id, name, images = [], price, stock_unit, description }) => {
   const navigate = useNavigate();
 
-  // ✅ Fixed function definition & URL template
   const goToProductDetail = () => {
-    navigate(`/Product-details/${id}`);
+    navigate(`/products/${id}`);
   };
 
+  // Safely get the first image, fallback to placeholder
+  const mainImage = images.length > 0 ? images[0].image || images[0] : "https://placehold.co/400x400/ccc/fff?text=No+Image";
+
   return (
-    <div className="w-56 m-4">
-      {/* ✅ Click handler is now a function, not immediately invoked */}
+    <div className="w-64 h-96 m-4">
       <div
         onClick={goToProductDetail}
-        className="bg-white rounded-2xl shadow-lg overflow-hidden hover:bg-amber-600
-                   hover:scale-105 transition-transform transform-gpu cursor-pointer"
+        className="bg-white rounded-2xl shadow-lg overflow-hidden 
+                   hover:bg-amber-600 hover:scale-105 
+                   transition-transform transform-gpu cursor-pointer flex flex-col"
       >
-        {/* ✅ Product image */}
-        <img
-          src={image}
-          alt={title}
-          className="w-full h-52 object-cover"
-        />
+        {/* PRODUCT IMAGE */}
+        <div className="w-full h-40 overflow-hidden flex-shrink-0">
+          <img
+            src={mainImage}
+            alt={name}
+            className="w-full h-full object-cover"
+            onError={(e) => {
+              e.target.onerror = null;
+              e.target.src = "https://placehold.co/400x400/ccc/fff?text=No+Image";
+            }}
+          />
+        </div>
 
-        {/* ✅ Product info section */}
-        <div className="p-4">
-          <p className="font-semibold text-gray-900 truncate">{title}</p>
-
-          {/* ✅ Star rating */}
-          <div className="flex gap-1 items-center mt-1">
-            <div className="flex">
-              {[...Array(5)].map((_, i) => (
-                <Star
-                  key={i}
-                  size={16}
-                  className={
-                    i < rating
-                      ? "fill-yellow-400 text-yellow-400"
-                      : "text-gray-300"
-                  }
-                />
-              ))}
-            </div>
-            <span className="text-xs text-sky-400">({sold})</span>
-          </div>
-
-          {/* ✅ Price */}
-          <div className="mt-2">
+        {/* PRODUCT INFO */}
+        <div className="p-4 flex flex-col flex-1">
+          <p className="font-semibold text-gray-900 truncate">{name}</p>
+          <span className="text-xs text-sky-400 mt-1">In Stock: {stock_unit}</span>
+          <p className="text-sm text-gray-500 mt-2 line-clamp-2 flex-1">{description}</p>
+          <div className="mt-3">
             <span className="text-lg font-bold text-sky-600">${price}</span>
           </div>
         </div>
