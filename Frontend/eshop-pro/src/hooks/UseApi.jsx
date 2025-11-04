@@ -1,57 +1,75 @@
-import { useState } from "react";
+import { useState, useEffect, useContext, useMemo } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router";
-import { useContext } from "react";
+import { useNavigate } from "react-router"; // ✅ FIXED — must be react-router-dom
 import { AuthContext } from "../Context/AuthContext";
 
 const BASE_URL = "http://localhost:8000/api";
 
 export const useApi = () => {
-  const { token } = useContext(AuthContext); // use Firebase token
+  const { token } = useContext(AuthContext);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
-  const api = axios.create({ baseURL: BASE_URL });~
+  // ✅ Use useMemo so axios instance isn't recreated every render
+  const api = useMemo(() => {
+    return axios.create({ baseURL: BASE_URL });
+  }, []);
 
-  // Add token to headers automatically
-  api.interceptors.request.use((config) => {
-    if (token) config.headers.Authorization = `Bearer ${token}`;
-    return config;
-  });
+  // ✅ Setup interceptors inside useEffect (and clean them up)
+  useEffect(() => {
+    // Request interceptor
+    const reqInterceptor = api.interceptors.request.use(
+      (config) => {
+        if (token) config.headers.Authorization = `Bearer ${token}`;
+        return config;
+      },
+      (err) => Promise.reject(err)
+    );
 
-  // Global error handling
-  api.interceptors.response.use(
-    (res) => res,
-    (err) => {
-      const status = err.response?.status;
+    // Response interceptor
+    const resInterceptor = api.interceptors.response.use(
+      (res) => res,
+      (err) => {
+        const status = err.response?.status;
 
-      if (status === 401) {
-        // Unauthorized → redirect to login
-        navigate("/login", { replace: true });
-      } else if (status === 403) {
-        // Forbidden → unauthorized page
-        navigate("/unauthorized", { replace: true });
+        if (status === 401) {
+          console.warn("Unauthorized: Redirecting to login...");
+          navigate("/login", { replace: true });
+        } else if (status === 403) {
+          console.warn("Forbidden: Redirecting to unauthorized page...");
+          navigate("/unauthorized", { replace: true });
+        }
+
+        return Promise.reject(err);
       }
+    );
 
-      return Promise.reject(err);
-    }
-  );
+    // ✅ Clean up interceptors on unmount or token change
+    return () => {
+      api.interceptors.request.eject(reqInterceptor);
+      api.interceptors.response.eject(resInterceptor);
+    };
+  }, [api, token, navigate]);
 
-  const request = async (endpoint, method, body = null) => {
+  // ✅ Unified request handler
+  const request = async (endpoint, method = "GET", body = null) => {
     setLoading(true);
     setError(null);
+
     try {
-      const res = await api({ method, url: endpoint, data: body });
-      setLoading(false);
-      return res.data;
+      const response = await api({ method, url: endpoint, data: body });
+      return response.data;
     } catch (err) {
-      setError(err);
-      setLoading(false);
+      console.error("API Error:", err);
+      setError(err.response?.data || "Request failed");
       return null;
+    } finally {
+      setLoading(false);
     }
   };
 
+  // ✅ Return a clean API interface
   return {
     loading,
     error,

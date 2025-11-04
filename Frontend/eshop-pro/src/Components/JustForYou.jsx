@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import ProductCard from "./card/ProductCard";
 import { useApi } from "../hooks/UseApi.jsx";
-import img from '../../public/images/product-7.jpg'
 
 const JustForYou = () => {
   const [products, setProducts] = useState([]); // Full list from API
@@ -44,8 +43,9 @@ const JustForYou = () => {
         {products.slice(0, visibleCount).map((product) => (
           <ProductCard
             key={product.id}
+            id={product.id}
             stock_unit={product.stock_unit}
-            images={img}
+            images={product.images}
             name={product.name}
             description={product.description}
             price={product.price}

@@ -1,7 +1,7 @@
 import { createBrowserRouter } from "react-router";
 import HomeLayout from "../Layout/HomeLayout";
 import Home from "../Page/Home";
-import ProductPage from "../Components/ProductPage";
+import ProductPage from "../Page/ProductPage";
 import About from "../Page/About";
 import CatagoriesPage from "../Page/CatagoriesPage";
 import SignIn from "../Page/Auth/SignIn";
@@ -23,7 +23,7 @@ export const router = createBrowserRouter([
       { path: "signup", element: <SignIn /> },
       { path: "login", element: <LoginPage /> },
       { path: "user", element: <UserPage /> },
-      { path: "Product-details/:id", element: <ProductPage/> },
+      { path: "products/:id", element: <ProductPage/> },
       { path: "catagories", element: <Categories/> },
       {path: "brandcenter", element: <BrandCenter/>},
       {path: "blog", element: <Blog/>},

@@ -1,11 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  Plus,
-  Home,
-  Settings,
-  Package,
-  ShoppingCart,
-} from "lucide-react";
+import { Plus, Home, Settings, Package, ShoppingCart, ShoppingBasket } from "lucide-react";
 import AddProduct from "../../Components/DashBoard/AddProduct";
 import DashboardInfo from "../../Components/DashBoard/DashboardInfo";
 import ProductList from "../../Components/DashBoard/ProductList";
@@ -25,8 +19,14 @@ const AdminDashboard = () => {
     const data = await get("/products/");
     if (data) {
       const totalProducts = data.length;
-      const totalStock = data.reduce((acc, product) => acc + product.stock_unit, 0);
-      const totalSold = data.reduce((acc, product) => acc + (product.sold_units || 0), 0);
+      const totalStock = data.reduce(
+        (acc, product) => acc + product.stock_unit,
+        0
+      );
+      const totalSold = data.reduce(
+        (acc, product) => acc + (product.sold_units || 0),
+        0
+      );
       setStats({ totalProducts, totalSold, totalStock });
     }
   };
@@ -60,6 +60,14 @@ const AdminDashboard = () => {
               </li>
               <li
                 className={`flex items-center gap-2 mb-4 p-2 rounded cursor-pointer hover:bg-gray-700 ${
+                  activeTab === "add-product" ? "bg-gray-700" : ""
+                }`}
+                onClick={() => setActiveTab("showProducts")}
+              >
+                <ShoppingBasket size={18} /> see Products
+              </li>
+              <li
+                className={`flex items-center gap-2 mb-4 p-2 rounded cursor-pointer hover:bg-gray-700 ${
                   activeTab === "settings" ? "bg-gray-700" : ""
                 }`}
                 onClick={() => setActiveTab("settings")}
@@ -70,6 +78,7 @@ const AdminDashboard = () => {
           </nav>
         </div>
       </aside>
+.
 
       <main className="flex-1 p-10">
         <header className="mb-8">
