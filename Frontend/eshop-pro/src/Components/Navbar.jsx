@@ -7,6 +7,7 @@ const Navbar = () => {
   // Get the user state and LogoutUser function from the context
   const { user, LogoutUser } = useContext(AuthContext);
   const navigate = useNavigate();
+  console.log("Navbar User:", user);
 
   const handleLogout = async () => {
     try {

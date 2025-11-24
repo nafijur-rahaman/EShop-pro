@@ -1,9 +1,8 @@
 import { createBrowserRouter } from "react-router";
 import HomeLayout from "../Layout/HomeLayout";
 import Home from "../Page/Home";
-import ProductPage from "../Components/Productpage";
 import About from "../Page/About";
-import CatagoriesPage from "../Page/CatagoriesPage";
+import CatagoriesPage from "../Page/CategoriesPage";
 import SignIn from "../Page/Auth/SignIn";
 import LoginPage from "../Page/Auth/LoginPage";
 import UserPage from "../Page/Auth/SignIn";
@@ -18,19 +17,13 @@ export const router = createBrowserRouter([
     element: <HomeLayout></HomeLayout>,
     children:[
         {path:"/", element:<Home></Home>},
-        {path: "Product-details/:id",element:<ProductPage></ProductPage>},
         {path:"categories", element:<Categories/>},
-        {path:"about", element:<About/>}
-    ]
-    element: <HomeLayout />,
-    children: [
-      { path: "/", element: <Home /> },
+        {path:"about", element:<About/>},
       { path: "catagories", element: <CatagoriesPage /> },
       { path: "about", element: <About /> },
       { path: "signup", element: <SignIn /> },
       { path: "login", element: <LoginPage /> },
       { path: "user", element: <UserPage /> },
-      { path: "products/:id", element: <ProductPage/> },
       { path: "catagories", element: <Categories/> },
       {path: "brandcenter", element: <BrandCenter/>},
       {path: "blog", element: <Blog/>},

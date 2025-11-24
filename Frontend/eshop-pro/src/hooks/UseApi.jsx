@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext, useMemo } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router"; // ✅ FIXED — must be react-router-dom
+import { useNavigate } from "react-router"; 
 import { AuthContext } from "../Context/AuthContext";
 
 const BASE_URL = "http://localhost:8000/api";
@@ -11,14 +11,14 @@ export const useApi = () => {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
-  // ✅ Use useMemo so axios instance isn't recreated every render
+ 
   const api = useMemo(() => {
     return axios.create({ baseURL: BASE_URL });
   }, []);
 
-  // ✅ Setup interceptors inside useEffect (and clean them up)
+
   useEffect(() => {
-    // Request interceptor
+ 
     const reqInterceptor = api.interceptors.request.use(
       (config) => {
         if (token) config.headers.Authorization = `Bearer ${token}`;
@@ -27,7 +27,7 @@ export const useApi = () => {
       (err) => Promise.reject(err)
     );
 
-    // Response interceptor
+    
     const resInterceptor = api.interceptors.response.use(
       (res) => res,
       (err) => {
@@ -45,14 +45,14 @@ export const useApi = () => {
       }
     );
 
-    // ✅ Clean up interceptors on unmount or token change
+
     return () => {
       api.interceptors.request.eject(reqInterceptor);
       api.interceptors.response.eject(resInterceptor);
     };
   }, [api, token, navigate]);
 
-  // ✅ Unified request handler
+
   const request = async (endpoint, method = "GET", body = null) => {
     setLoading(true);
     setError(null);
@@ -69,7 +69,7 @@ export const useApi = () => {
     }
   };
 
-  // ✅ Return a clean API interface
+
   return {
     loading,
     error,
