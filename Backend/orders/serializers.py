@@ -1,42 +1,30 @@
 from rest_framework import serializers
-from .models import Cart, CartItem, Order, OrderItem
+from .models import CartItem, Order, OrderItem
 from products.serializers import ProductSerializer
 
-
-# ---------------------- CART SERIALIZERS ---------------------- #
+# ---------------------- CART ---------------------- #
 class CartItemSerializer(serializers.ModelSerializer):
-    product = ProductSerializer(read_only=True)
-    product_id = serializers.IntegerField(write_only=True)
+    product_detail = ProductSerializer(source='product', read_only=True)
 
     class Meta:
         model = CartItem
-        fields = ["id", "product", "product_id", "quantity"]
+        fields = ['id', 'product', 'product_detail', 'quantity']
 
 
-class CartSerializer(serializers.ModelSerializer):
-    items = CartItemSerializer(many=True)
-
-    class Meta:
-        model = Cart
-        fields = ["id", "items"]
-        
-
-# ---------------------- ORDER SERIALIZERS ---------------------- #
+# ---------------------- ORDER ITEM ---------------------- #
 class OrderItemSerializer(serializers.ModelSerializer):
-    product = ProductSerializer(read_only=True)
+    product_detail = ProductSerializer(source='product', read_only=True)
+    total_price = serializers.ReadOnlyField()
 
     class Meta:
         model = OrderItem
-        fields = ["id", "product", "quantity", "price"]
+        fields = ['id', 'product', 'product_detail', 'quantity', 'price', 'total_price']
 
 
+# ---------------------- ORDER ---------------------- #
 class OrderSerializer(serializers.ModelSerializer):
-    items = OrderItemSerializer(many=True)
+    items = OrderItemSerializer(many=True, read_only=True)
 
     class Meta:
         model = Order
-        fields = [
-            "id", "order_id", "total_amount",
-            "status", "shipping_address", "created_at",
-            "items"
-        ]
+        fields = ['id', 'total_amount', 'payment_status', 'transaction_id', 'created_at', 'items']

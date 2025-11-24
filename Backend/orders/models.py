@@ -5,65 +5,50 @@ from products.models import Product
 User = settings.AUTH_USER_MODEL
 
 
-# ---------------------- CART ---------------------- #
-class Cart(models.Model):
-    user = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name="cart",
-        null=True, blank=True
-    )
-    session_key = models.CharField(max_length=40, null=True, blank=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f"Cart ({self.user or self.session_key})"
-
-
+# ---------------------- CART ITEM ---------------------- #
 class CartItem(models.Model):
-    cart = models.ForeignKey(
-        Cart, on_delete=models.CASCADE,
-        related_name="items"
-    )
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='cart_items')
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=1)
+    added_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        unique_together = ("cart", "product")
+        unique_together = ('user', 'product')  # avoid duplicates
 
     def __str__(self):
-        return f"{self.product.name} x {self.quantity}"
+        return f"{self.user} - {self.product.name} ({self.quantity})"
 
 
 # ---------------------- ORDER ---------------------- #
 class Order(models.Model):
-    STATUS = [
-        ("pending", "Pending"),
-        ("processing", "Processing"),
-        ("completed", "Completed"),
-        ("cancelled", "Cancelled"),
-    ]
-
-    user = models.ForeignKey(
-        User, on_delete=models.SET_NULL,
-        null=True, blank=True, related_name="orders"
+    PAYMENT_STATUSES = (
+        ('pending', 'Pending'),
+        ('processing', 'Processing'),
+        ('completed', 'Completed'),
+        ('failed', 'Failed'),
+        ('cancelled', 'Cancelled'),
     )
-    order_id = models.CharField(max_length=50, unique=True)
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='orders')
     total_amount = models.DecimalField(max_digits=12, decimal_places=2)
-    status = models.CharField(max_length=20, choices=STATUS, default="pending")
-    shipping_address = models.TextField()
+    payment_status = models.CharField(max_length=20, choices=PAYMENT_STATUSES, default='pending')
+    transaction_id = models.CharField(max_length=100, null=True, blank=True)  # SSLCommerz
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.order_id
+        return f"Order #{self.id} - {self.user} - {self.payment_status}"
 
 
+# ---------------------- ORDER ITEM ---------------------- #
 class OrderItem(models.Model):
-    order = models.ForeignKey(
-        Order, on_delete=models.CASCADE,
-        related_name="items"
-    )
-    product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True)
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='items')
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField()
-    price = models.DecimalField(max_digits=12, decimal_places=2)
+    price = models.DecimalField(max_digits=12, decimal_places=2)  # snapshot of price
+
+    @property
+    def total_price(self):
+        return self.price * self.quantity
 
     def __str__(self):
-        return f"{self.product} x {self.quantity}"
+        return f"{self.product.name} x {self.quantity}"

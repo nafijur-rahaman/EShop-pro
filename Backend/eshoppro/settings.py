@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     "products",
     "review",
     "orders",
+    'payment',
 ]
 
 CORS_ALLOW_ALL_ORIGINS = True
@@ -166,3 +167,12 @@ EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 EMAIL_HOST_USER = os.getenv("EMAIL")
 EMAIL_HOST_PASSWORD = os.getenv("EMAIL_PASSWORD")
+
+
+
+
+SSL_COMMERZ_STORE_ID = 'donat66cde4ca58cbb'
+SSL_COMMERZ_STORE_PASSWORD = 'donat66cde4ca58cbb@ssl'
+SSL_COMMERZ_SESSION_API = 'https://sandbox.sslcommerz.com/gwprocess/v3/api.php'
+SSL_COMMERZ_VALIDATION_API = 'https://sandbox.sslcommerz.com/validator/api/validationserverAPI.php?wsdl'
+SSL_COMMERZ_TEST_MODE = True  # False for production
