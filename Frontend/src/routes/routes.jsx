@@ -5,6 +5,7 @@ import Homepage from "../pages/Homepage";
 import AllProducts from "../pages/AllProducts";
 import ProductDetails from "../pages/ProductDetails";
 import ProfilePage from "../pages/ProfilePage";
+import Login from "../pages/Login";
 
 
 export const router = createBrowserRouter([
@@ -26,6 +27,9 @@ export const router = createBrowserRouter([
       {
         path: "/profile-page",
         element: <ProfilePage></ProfilePage>
+      },{
+        path: "/login",
+        element: <Login></Login>
       }
     ],
   },

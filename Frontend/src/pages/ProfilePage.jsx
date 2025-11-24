@@ -225,6 +225,9 @@ const ProfilePage = () => {
                 </div>
               </div>
             )}
+
+
+                        
             
             {/* --- TAB: WISHLIST / CART SHORTCUT --- */}
             {activeTab === 'wishlist' && (
