@@ -12,7 +12,7 @@ const Footer = () => {
           {/* Column 1: Brand & Newsletter (Spans 4 cols on lg) */}
           <div className="lg:col-span-4 space-y-6">
             <a href="/" className="text-2xl font-bold text-white tracking-tighter">
-              LUXE<span className="text-blue-600">.</span>
+              ESHOP<span className="text-blue-600"> PRO.</span>
             </a>
             <p className="text-neutral-400 text-sm leading-relaxed max-w-xs">
               Elevating your lifestyle with curated premium goods. Quality meets modern design in every detail.
@@ -87,7 +87,7 @@ const Footer = () => {
 
           {/* Copyright */}
           <div className="text-neutral-500 text-xs order-3 md:order-2 text-center md:text-right">
-            &copy; {new Date().getFullYear()} Luxe E-Commerce. All rights reserved.
+            &copy; {new Date().getFullYear()} Eshop pro E-Commerce. All rights reserved.
           </div>
 
           {/* Payment Methods (Simulated) */}

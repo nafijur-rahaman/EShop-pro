@@ -1,5 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { ShoppingBag, User, Search, Menu, X, Heart, Minus, Plus, Trash2, ArrowRight } from 'lucide-react';
+
+import { ShoppingBag, User, Search, Menu, X, Heart, Minus, Plus, Trash2, ArrowRight, LogOut, LogIn } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { Link, useNavigate, BrowserRouter } from 'react-router';
+import { useAuth } from '../hook/UseAuth';
+
 
 // --- 1. CART DRAWER COMPONENT ---
 const CartDrawer = ({ isOpen, onClose }) => {
@@ -25,7 +29,6 @@ const CartDrawer = ({ isOpen, onClose }) => {
     setCartItems(prev => prev.filter(item => item.id !== id));
   };
 
-  // Close drawer on escape key
   useEffect(() => {
     const handleEsc = (e) => {
       if (e.key === 'Escape') onClose();
@@ -36,16 +39,11 @@ const CartDrawer = ({ isOpen, onClose }) => {
 
   return (
     <>
-      {/* Backdrop */}
       <div 
         className={`fixed inset-0 bg-black/40 backdrop-blur-sm z-[60] transition-opacity duration-300 ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
         onClick={onClose}
       />
-
-      {/* Drawer Panel */}
       <div className={`fixed inset-y-0 right-0 w-full max-w-md bg-white shadow-2xl z-[70] transform transition-transform duration-300 ease-out flex flex-col ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}>
-        
-        {/* Header */}
         <div className="px-6 py-4 border-b border-neutral-100 flex items-center justify-between bg-white">
           <h2 className="text-lg font-bold flex items-center gap-2">
             <ShoppingBag size={20} /> Shopping Cart <span className="text-neutral-400 text-sm font-normal">({cartItems.length})</span>
@@ -54,8 +52,6 @@ const CartDrawer = ({ isOpen, onClose }) => {
             <X size={20} />
           </button>
         </div>
-
-        {/* Free Shipping Progress */}
         <div className="px-6 py-4 bg-neutral-50 border-b border-neutral-100">
           <div className="flex justify-between text-xs font-medium mb-2">
             {progress < 100 ? (
@@ -66,14 +62,9 @@ const CartDrawer = ({ isOpen, onClose }) => {
             <span>{Math.round(progress)}%</span>
           </div>
           <div className="w-full h-1.5 bg-neutral-200 rounded-full overflow-hidden">
-            <div 
-              className="h-full bg-neutral-900 transition-all duration-500 ease-out" 
-              style={{ width: `${progress}%` }}
-            />
+            <div className="h-full bg-neutral-900 transition-all duration-500 ease-out" style={{ width: `${progress}%` }} />
           </div>
         </div>
-
-        {/* Cart Items (Scrollable) */}
         <div className="flex-1 overflow-y-auto p-6 space-y-6">
           {cartItems.length === 0 ? (
             <div className="h-full flex flex-col items-center justify-center text-center space-y-4">
@@ -110,8 +101,6 @@ const CartDrawer = ({ isOpen, onClose }) => {
             ))
           )}
         </div>
-
-        {/* Footer */}
         {cartItems.length > 0 && (
           <div className="border-t border-neutral-100 p-6 bg-white space-y-4">
             <div className="space-y-2 text-sm">
@@ -138,18 +127,27 @@ const CartDrawer = ({ isOpen, onClose }) => {
   );
 };
 
-// --- 2. UPDATED NAVBAR COMPONENT ---
+
 const Navbar = () => {
+  const { user, logout } = useAuth(); 
+  const navigate = useNavigate();
+  
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
 
+  const handleLogout = () => {
+    logout();
+    navigate('/'); 
+    setIsMobileMenuOpen(false);
+  };
+
   // Navigation Links Data
   const navLinks = [
-    { name: 'New Arrivals', href: '#' },
-    { name: 'Men', href: '#' },
-    { name: 'Women', href: '#' },
-    { name: 'Accessories', href: '#' },
-    { name: 'Sale', href: '#', isHighlight: true },
+    { name: 'New Arrivals', href: '/shop' },
+    { name: 'Men', href: '/shop?category=men' },
+    { name: 'Women', href: '/shop?category=women' },
+    { name: 'Accessories', href: '/shop?category=accessories' },
+    { name: 'Sale', href: '/shop?category=sale', isHighlight: true },
   ];
 
   return (
@@ -157,7 +155,7 @@ const Navbar = () => {
       <header className="w-full font-sans">
         {/* Announcement Bar */}
         <div className="bg-neutral-900 text-white text-xs py-2 text-center tracking-wide">
-          <p>Free Shipping on Orders Over $150 — <span className="underline cursor-pointer">Shop Now</span></p>
+          <p>Free Shipping on Orders Over $150 — <Link to="/shop" className="underline cursor-pointer">Shop Now</Link></p>
         </div>
 
         {/* Main Navbar */}
@@ -177,17 +175,17 @@ const Navbar = () => {
 
               {/* Logo */}
               <div className="flex-shrink-0 flex items-center justify-center md:justify-start flex-1 md:flex-none">
-                <a href="/" className="text-2xl font-bold tracking-tighter text-neutral-900">
-                  LUXE<span className="text-blue-600">.</span>
-                </a>
+                <Link to="/" className="text-2xl font-bold tracking-tighter text-neutral-900">
+                  ESHOP<span className="text-blue-600"> PRO.</span>
+                </Link>
               </div>
 
               {/* Desktop Links */}
               <div className="hidden md:flex space-x-8 mx-auto">
                 {navLinks.map((link) => (
-                  <a
+                  <Link
                     key={link.name}
-                    href={link.href}
+                    to={link.href}
                     className={`text-sm font-medium transition-colors duration-200 ${
                       link.isHighlight 
                         ? 'text-red-600 hover:text-red-700' 
@@ -195,32 +193,66 @@ const Navbar = () => {
                     }`}
                   >
                     {link.name}
-                  </a>
+                  </Link>
                 ))}
               </div>
 
-              {/* Action Icons */}
+              {/* Action Icons (Dynamic based on Auth) */}
               <div className="flex items-center space-x-4 md:space-x-6 justify-end flex-1 md:flex-none">
-                <button className="hidden sm:block text-neutral-600 hover:text-black transition-colors">
-                  <Search size={20} strokeWidth={2} />
-                </button>
-                <button className="hidden sm:block text-neutral-600 hover:text-black transition-colors">
-                  <Heart size={20} strokeWidth={2} />
-                </button>
-                <button className="text-neutral-600 hover:text-black transition-colors">
-                  <User size={20} strokeWidth={2} />
-                </button>
+                
+                {user ? (
+                  // --- STATE: LOGGED IN USER ---
+                  <>
+                    {/* Cart Trigger */}
+                    <button 
+                      onClick={() => setIsCartOpen(true)}
+                      className="group relative text-neutral-600 hover:text-black transition-colors"
+                      title="Cart"
+                    >
+                      <ShoppingBag size={20} strokeWidth={2} />
+                      <span className="absolute -top-1.5 -right-1.5 bg-blue-600 text-white text-[10px] font-bold h-4 w-4 flex items-center justify-center rounded-full group-hover:bg-blue-700 transition-colors">
+                        3
+                      </span>
+                    </button>
 
-                {/* Cart Trigger */}
-                <button 
-                  onClick={() => setIsCartOpen(true)}
-                  className="group relative text-neutral-600 hover:text-black transition-colors"
-                >
-                  <ShoppingBag size={20} strokeWidth={2} />
-                  <span className="absolute -top-1.5 -right-1.5 bg-blue-600 text-white text-[10px] font-bold h-4 w-4 flex items-center justify-center rounded-full group-hover:bg-blue-700 transition-colors">
-                    3
-                  </span>
-                </button>
+                    {/* Profile Link */}
+                    <Link to="/profile" className="text-neutral-600 hover:text-black transition-colors flex items-center gap-2" title="My Profile">
+                      <User size={20} strokeWidth={2} />
+                      <span className="hidden lg:block text-sm font-medium">
+                        {user.username || 'Profile'}
+                      </span>
+                    </Link>
+
+                    {/* Logout Button */}
+                    <button 
+                      onClick={handleLogout} 
+                      className="text-neutral-600 hover:text-red-600 transition-colors"
+                      title="Logout"
+                    >
+                      <LogOut size={20} strokeWidth={2} />
+                    </button>
+                  </>
+                ) : (
+                  // --- STATE: GUEST (NOT LOGGED IN) ---
+                  <>
+                    {/* Search & Wishlist (Visible only to guests per request) */}
+                    <button className="hidden sm:block text-neutral-600 hover:text-black transition-colors">
+                      <Search size={20} strokeWidth={2} />
+                    </button>
+                    <button className="hidden sm:block text-neutral-600 hover:text-black transition-colors">
+                      <Heart size={20} strokeWidth={2} />
+                    </button>
+
+                    <div className="flex items-center gap-4 border-l border-neutral-200 pl-4 ml-2">
+                      <Link to="/login" className="text-sm font-medium text-neutral-600 hover:text-black">
+                        Log in
+                      </Link>
+                      <Link to="/register" className="text-sm font-medium bg-neutral-900 text-white px-4 py-2 rounded-md hover:bg-black transition-colors">
+                        Register
+                      </Link>
+                    </div>
+                  </>
+                )}
               </div>
             </div>
           </div>
@@ -228,17 +260,55 @@ const Navbar = () => {
           {/* Mobile Menu */}
           <div className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out ${isMobileMenuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}>
             <div className="px-4 pt-2 pb-6 space-y-2 bg-white shadow-lg border-t border-neutral-100">
-              <div className="relative mb-4 mt-2">
-                <input 
-                  type="text" 
-                  placeholder="Search products..." 
-                  className="w-full bg-neutral-100 text-sm px-4 py-2.5 rounded-full outline-none focus:ring-1 focus:ring-blue-500"
-                />
-                <Search size={16} className="absolute right-4 top-3 text-neutral-400" />
-              </div>
+              
+              {/* Show Search Bar only if Guest */}
+              {!user && (
+                <div className="relative mb-4 mt-2">
+                  <input 
+                    type="text" 
+                    placeholder="Search products..." 
+                    className="w-full bg-neutral-100 text-sm px-4 py-2.5 rounded-full outline-none focus:ring-1 focus:ring-blue-500"
+                  />
+                  <Search size={16} className="absolute right-4 top-3 text-neutral-400" />
+                </div>
+              )}
+
               {navLinks.map((link) => (
-                <a key={link.name} href={link.href} className="block px-3 py-2 text-neutral-600 hover:text-black">{link.name}</a>
+                <Link 
+                  key={link.name} 
+                  to={link.href} 
+                  className="block px-3 py-2 text-neutral-600 hover:text-black"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  {link.name}
+                </Link>
               ))}
+
+              {/* Dynamic Mobile Footer Actions */}
+              <div className="pt-4 border-t border-neutral-100 mt-4 space-y-2">
+                {user ? (
+                  <>
+                    <Link to="/profile" className="flex items-center gap-2 px-3 py-2 text-base font-medium text-neutral-600 hover:text-black" onClick={() => setIsMobileMenuOpen(false)}>
+                      <User size={18} /> My Profile
+                    </Link>
+                    <button 
+                      onClick={handleLogout}
+                      className="w-full text-left flex items-center gap-2 px-3 py-2 text-base font-medium text-red-600 hover:bg-red-50 rounded-md"
+                    >
+                      <LogOut size={18} /> Logout
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <Link to="/login" className="flex items-center gap-2 px-3 py-2 text-base font-medium text-neutral-600 hover:text-black" onClick={() => setIsMobileMenuOpen(false)}>
+                      <LogIn size={18} /> Log in
+                    </Link>
+                    <Link to="/register" className="flex items-center gap-2 px-3 py-2 text-base font-medium text-neutral-600 hover:text-black" onClick={() => setIsMobileMenuOpen(false)}>
+                      <User size={18} /> Register
+                    </Link>
+                  </>
+                )}
+              </div>
             </div>
           </div>
         </nav>
@@ -249,5 +319,7 @@ const Navbar = () => {
     </>
   );
 };
-export default Navbar;
 
+
+
+export default Navbar;

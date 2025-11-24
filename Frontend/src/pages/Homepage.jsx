@@ -1,7 +1,7 @@
 import React from 'react';
 import { ArrowRight, Truck, ShieldCheck, RefreshCcw, ShoppingBag } from 'lucide-react';
+import { Link } from 'react-router';
 
-// Mock Data (In a real app, this comes from an API)
 const categories = [
   { id: 1, name: 'Urban Collection', image: 'https://images.unsplash.com/photo-1523381210434-271e8be1f52b?auto=format&fit=crop&q=80&w=800', size: 'large' },
   { id: 2, name: 'Summer Essentials', image: 'https://images.unsplash.com/photo-1540221652346-e5dd6b50f3e7?auto=format&fit=crop&q=80&w=600', size: 'small' },
@@ -143,7 +143,13 @@ const Homepage = () => {
                   <p className="text-neutral-900 font-semibold">{product.price}</p>
                 </div>
               </div>
+
+       
             ))}
+
+            <Link to="/all-products" className="mt-8 w-full bg-black text-white py-4 font-medium hover:bg-neutral-800 transition-colors flex items-center justify-center gap-2">
+              View More Products <ArrowRight size={20} />
+            </Link>
           </div>
         </div>
       </section>

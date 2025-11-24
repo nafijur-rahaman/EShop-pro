@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Filter, ChevronDown, ChevronUp, X, ShoppingBag, Heart } from 'lucide-react';
 
-// --- MOCK DATA ---
+
 const products = [
   { id: 1, name: 'Merino Wool Cardigan', price: 180, category: 'Tops', image: 'https://images.unsplash.com/photo-1434389677669-e08b4cac3105?auto=format&fit=crop&q=80&w=600', colors: ['#D2B48C', '#000000'] },
   { id: 2, name: 'Slim Fit Chinos', price: 120, category: 'Bottoms', image: 'https://images.unsplash.com/photo-1473966968600-fa801b869a1a?auto=format&fit=crop&q=80&w=600', colors: ['#556B2F', '#F5F5DC'] },
