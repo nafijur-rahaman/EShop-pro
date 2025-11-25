@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { useAuth } from '../hook/useAuth';
 import { useNavigate, Link } from 'react-router';
+import Swal from 'sweetalert2'; // ✅ Import SweetAlert2
 
 const Login = () => {
-  const { login } = useAuth(); // AuthContext login function
+  const { login } = useAuth(); 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -16,11 +17,28 @@ const Login = () => {
     setError('');
 
     try {
-      // Call login from AuthContext
       await login(username, password);
-      navigate('/profile-page'); // redirect after successful login
+
+      // ✅ SweetAlert2 success popup
+      await Swal.fire({
+        title: 'Logged in successfully!',
+        icon: 'success',
+        draggable: true,
+        confirmButtonText: 'Continue',
+      });
+
+      navigate('/profile-page'); // Redirect after closing popup
     } catch (err) {
       setError('Invalid credentials. Please try again.');
+
+      // ✅ SweetAlert2 error popup
+      Swal.fire({
+        title: 'Login Failed',
+        text: 'Invalid username or password.',
+        icon: 'error',
+        draggable: true,
+        confirmButtonText: 'Try Again',
+      });
     } finally {
       setLoading(false);
     }
@@ -81,7 +99,6 @@ const Login = () => {
             </button>
           </form>
 
-          {/* Sign up link */}
           <div className="text-center text-sm text-neutral-500">
             Don't have an account?{' '}
             <Link to="/register" className="font-semibold text-black hover:underline">
