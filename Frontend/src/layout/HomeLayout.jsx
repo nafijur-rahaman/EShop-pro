@@ -1,16 +1,17 @@
-import React from "react";
 import { Outlet } from "react-router";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
-const HomeLayout = () => {
+export default function HomeLayout() {
   return (
-    <div>
-      <Navbar></Navbar>
-      <Outlet></Outlet>
-      <Footer></Footer>
+    <div className="min-h-screen flex flex-col">
+      <Navbar />
+
+      <main className="flex-1 bg-gray-50">
+        <Outlet />
+      </main>
+
+      <Footer />
     </div>
   );
-};
-
-export default HomeLayout;
+}

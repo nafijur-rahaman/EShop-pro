@@ -1,5 +1,5 @@
 import { useState } from "react";
-import axiosInstance from "./axiosInstance"; // your central Axios instance
+import axiosInstance from "../api/axiosInstance"; // your central Axios instance
 
 export const useApi = () => {
   const [loading, setLoading] = useState(false);
