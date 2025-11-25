@@ -1,25 +1,27 @@
 import React, { useState } from 'react';
-import { useAuth } from '../hook/UseAuth';
+import { useAuth } from '../hook/useAuth';
 import { useNavigate } from 'react-router';
 
 const Login = () => {
-  const { login} = useAuth();
+  const { login } = useAuth(); // AuthContext login function
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError('');
+
     try {
-      await login(username, password); 
+      // Call login from AuthContext
+      await login(username, password);
       alert('Logged in successfully!');
-      navigate('/profile-page');
+      navigate('/profile-page'); // redirect after successful login
     } catch (err) {
+      // Catch errors from login
       setError('Invalid credentials. Please try again.');
     } finally {
       setLoading(false);

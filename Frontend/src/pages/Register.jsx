@@ -3,10 +3,9 @@ import { Eye, EyeOff, ArrowRight } from 'lucide-react';
 import { useNavigate } from 'react-router';
 import { useAuth } from '../hook/UseAuth';
 
-
 const Register = () => {
   const navigate = useNavigate();
-  const { register } = useAuth();
+  const { register } = useAuth(); // AuthContext register function
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
@@ -26,10 +25,12 @@ const Register = () => {
     setError('');
 
     try {
+      // Call register from AuthContext
       await register(formData.username, formData.email, formData.password);
       alert("Account created successfully!");
-      navigate('/login'); 
+      navigate('/login'); // redirect after successful registration
     } catch (err) {
+      // Handle error from registration
       console.error(err);
       setError(err.response?.data || "Something went wrong. Please try again.");
     } finally {
