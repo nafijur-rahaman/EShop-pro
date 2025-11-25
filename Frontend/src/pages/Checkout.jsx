@@ -4,6 +4,7 @@ import { useApi } from "../hook/useApi";
 const Checkout = () => {
   const { get, loading, error } = useApi();
   const [product, setProduct] = useState(null);
+  const [quantity, setQuantity] = useState(1);
 
   // Fetch product from API
   useEffect(() => {
@@ -11,10 +12,12 @@ const Checkout = () => {
       try {
         const queryParams = new URLSearchParams(window.location.search);
         const productId = queryParams.get("product");
+        const qty = parseInt(queryParams.get("quantity")) || 1;
+        setQuantity(qty);
 
         if (!productId) return;
 
-        const data = await get(`products/${productId}/`); // your API endpoint
+        const data = await get(`products/${productId}/`); // API endpoint
         setProduct(data);
       } catch (err) {
         console.error("Error fetching product:", err);
@@ -36,11 +39,14 @@ const Checkout = () => {
     );
   }
 
-  // Calculate totals safely
+  // Safe calculations
   const price = Number(product.price) || 0;
   const shipping = 15.0;
-  const tax = price * 0.08;
-  const total = price + shipping + tax;
+  const tax = price * 0.08 * quantity; // tax per unit
+  const total = price * quantity + shipping + tax;
+
+  // Use first image from product.images array
+  const productImage = product.images?.[0]?.image || "https://via.placeholder.com/150";
 
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
@@ -116,13 +122,9 @@ const Checkout = () => {
               <h2 className="text-lg font-medium text-gray-900 mb-6">Order Summary</h2>
 
               <div className="flex gap-4 mb-6 pb-6 border-b border-gray-100">
-                {product.image ? (
-                  <div className="h-20 w-20 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
-                    <img src={product.image} alt={product.name} className="h-full w-full object-cover object-center" />
-                  </div>
-                ) : (
-                  <div className="h-20 w-20 flex-shrink-0 rounded-md border border-gray-200 flex items-center justify-center bg-gray-200">No Image</div>
-                )}
+                <div className="h-20 w-20 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
+                  <img src={productImage} alt={product.name} className="h-full w-full object-cover object-center" />
+                </div>
 
                 <div className="flex flex-1 flex-col">
                   <div>
@@ -133,7 +135,7 @@ const Checkout = () => {
                     <p className="mt-1 text-sm text-gray-500">{product.description}</p>
                   </div>
                   <div className="flex flex-1 items-end justify-between text-sm">
-                    <p className="text-gray-500">Qty 1</p>
+                    <p className="text-gray-500">Qty {quantity}</p>
                   </div>
                 </div>
               </div>
@@ -141,7 +143,7 @@ const Checkout = () => {
               <div className="space-y-4">
                 <div className="flex justify-between text-base text-gray-600">
                   <p>Subtotal</p>
-                  <p>${price.toFixed(2)}</p>
+                  <p>${(price * quantity).toFixed(2)}</p>
                 </div>
                 <div className="flex justify-between text-base text-gray-600">
                   <p>Shipping</p>
