@@ -37,9 +37,9 @@ INSTALLED_APPS = [
     # local apps
     "users",
     "products",
-    # "review",
+    "review",
     "orders",
-    # 'payment',
+    'payment'
 ]
 
 CORS_ALLOW_ALL_ORIGINS = True
