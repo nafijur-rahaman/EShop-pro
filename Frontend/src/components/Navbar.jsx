@@ -1,22 +1,19 @@
 import { Link, NavLink, useNavigate } from "react-router";
 import { useAuth } from "../hook/useAuth";
 import { useState } from "react";
+import { User as UserIcon } from "lucide-react";
 
 export default function Navbar() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
 
-  // When user types in the search bar
-  const handleChange = (e) => {
-    setSearchQuery(e.target.value);
-  };
+  const handleChange = (e) => setSearchQuery(e.target.value);
 
-  // On Enter key press, redirect to /search page
   const handleKeyDown = (e) => {
     if (e.key === "Enter" && searchQuery.trim() !== "") {
       navigate(`/search?query=${encodeURIComponent(searchQuery.trim())}`);
-      setSearchQuery(""); // optional: clear search after redirect
+      setSearchQuery("");
     }
   };
 
@@ -30,12 +27,23 @@ export default function Navbar() {
 
         {/* Links */}
         <div className="hidden md:flex gap-6 text-gray-700">
-          <NavLink to="/" className="hover:text-black">Home</NavLink>
-          <NavLink to="/category" className="hover:text-black">Categories</NavLink>
-          <NavLink to="/about" className="hover:text-black">About Us</NavLink>
+          {["/", "/category", "/about"].map((path) => {
+            const name = path === "/" ? "Home" : path.slice(1).charAt(0).toUpperCase() + path.slice(2);
+            return (
+              <NavLink
+                key={path}
+                to={path}
+                className={({ isActive }) =>
+                  isActive ? "text-black font-semibold" : "hover:text-black"
+                }
+              >
+                {name}
+              </NavLink>
+            );
+          })}
         </div>
 
-        {/* Search Bar */}
+        {/* Search */}
         <div className="hidden md:block">
           <input
             type="text"
@@ -52,12 +60,23 @@ export default function Navbar() {
           <Link to="/cart" className="hover:scale-105">🛒</Link>
 
           {user ? (
-            <button
-              onClick={() => { logout(); navigate("/login"); }}
-              className="px-4 py-1 border rounded-full hover:bg-gray-100"
+            <div
+              onClick={() => navigate("/profile-page")}
+              className="flex items-center gap-2 cursor-pointer hover:bg-gray-100 px-2 py-1 rounded-full"
             >
-              Logout
-            </button>
+              {user.avatar ? (
+                <img
+                  src={user.avatar}
+                  alt={`${user.first_name}'s avatar`}
+                  className="w-8 h-8 rounded-full border object-cover"
+                />
+              ) : (
+                <UserIcon className="w-8 h-8 text-gray-400" />
+              )}
+              <span className="hidden md:block font-medium text-gray-700">
+                {user.first_name || "User"}
+              </span>
+            </div>
           ) : (
             <Link
               to="/login"
