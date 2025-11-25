@@ -13,12 +13,7 @@ import Register from "../pages/Register";
 import AdminDashboard from "../pages/admin/AdminDashboard";
 import ProfilePage from "../pages/ProfilePage";
 import ProtectedRoute from "../components/ProtectedRoute";
-import Payment from "../pages/Payment";
-import PaymentSuccess from "../pages/PaymentSuccess";
-import PaymentFail from "../pages/PaymentFail";
-import PaymentCancel from "../pages/PaymentCancel";
-import MyOrders from "../pages/MyOrders";
-import OrderDetails from "../pages/OrderDetails";
+import AboutUs from "../../public/images/AboutUs";
 
 export default function AppRoutes() {
   return (
@@ -27,6 +22,7 @@ export default function AppRoutes() {
       <Route element={<HomeLayout />}>
         <Route path="/" element={<Home />} />
         <Route path="/category" element={<CategoryProducts />} />
+        <Route path="/about" element={<AboutUs />} />
         <Route path="/category/:id" element={<CategoryProducts />} />
         <Route path="/product/:id" element={<ProductDetails />} />
         <Route path="/cart" element={<Cart />} />

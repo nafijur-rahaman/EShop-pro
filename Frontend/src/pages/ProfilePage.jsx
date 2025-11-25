@@ -10,33 +10,43 @@ import {
   ChevronRight,
   Bell,
 } from "lucide-react";
+
 import { useAuth } from "../hook/useAuth";
-import { useApi } from "../hook/useApi";
+import { useApi } from "../hook/useApi";   // <-- NEW HOOK
 
 const ProfilePage = () => {
   const { user, logout } = useAuth();
-  const { get, loading, error } = useApi();
+  const api = useApi(); // <-- initialize API wrapper
 
   const [activeTab, setActiveTab] = useState("orders");
   const [orders, setOrders] = useState([]);
   const [profile, setProfile] = useState({});
+  const [error, setError] = useState("");
 
   useEffect(() => {
     if (!user) return;
 
-    const fetchData = async () => {
+    const fetchAll = async () => {
+      setError("");
+
       try {
-        const ordersRes = await get("orders/");
-        const profileRes = await get("profile/");
+        const [ordersRes, profileRes] = await Promise.all([
+          api.get("orders/"),
+          api.get("profile/"),
+        ]);
+
+        setOrders(ordersRes);
+        setProfile(profileRes);
 
         setOrders(ordersRes);
         setProfile(profileRes);
       } catch (err) {
-        console.error("API Fetch Error:", err);
+        console.error(err);
+        setError("Failed to load profile data.");
       }
     };
 
-    fetchData();
+    fetchAll();
   }, [user]);
 
   const TabButton = ({ id, icon: Icon, label }) => (
@@ -97,6 +107,7 @@ const ProfilePage = () => {
                 </p>
               </div>
 
+              {/* NAVIGATION */}
               <nav className="p-2 space-y-1">
                 <TabButton id="orders" icon={Package} label="My Orders" />
                 <TabButton id="profile" icon={User} label="Profile Details" />
@@ -118,7 +129,7 @@ const ProfilePage = () => {
           </aside>
 
           <main className="md:col-span-9 space-y-6">
-            {loading ? (
+            {api.loading ? (
               <p className="text-center text-neutral-500">Loading...</p>
             ) : error ? (
               <p className="text-center text-red-500">{JSON.stringify(error)}</p>
