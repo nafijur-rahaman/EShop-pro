@@ -10,18 +10,20 @@ import Checkout from "../pages/Checkout";
 import Orders from "../pages/Orders";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
+import SearchResultsPage from "../pages/SearchResultsPage"; // <-- add this import
 
 export default function AppRoutes() {
   return (
     <Routes>
       <Route element={<HomeLayout />}>
         <Route path="/" element={<Home />} />
-        <Route path="/category/:id" element={<CategoryProducts />} />
-        <Route path="/category" element={<Navigate to="/" />} /> {/* fallback */}
+        <Route path="/category" element={<CategoryProducts />} />       {/* categories page */}
+        <Route path="/category/:id" element={<CategoryProducts />} />   {/* products in category */}
         <Route path="/product/:id" element={<ProductDetails />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/checkout" element={<Checkout />} />
         <Route path="/orders" element={<Orders />} />
+        <Route path="/search" element={<SearchResultsPage />} />       {/* search results page */}
       </Route>
 
       <Route path="/admin" element={<AdminDashboard />} />
