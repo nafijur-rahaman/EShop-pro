@@ -16,21 +16,31 @@ export const CartProvider = ({ children }) => {
       setLoading(false);
       return;
     }
+
     try {
       setLoading(true);
+
       const res = await axiosInstance.get("cart/");
-      const items = res.data.items?.map(item => ({
-        ...item,
+
+      // backend returns: [{ id, product, product_detail, quantity }]
+      const items = res.data.map((item) => ({
+        id: item.id,
+        quantity: item.quantity,
         product: {
-          ...item.product,
-          image: item.product.images?.[0]?.image || item.product.image || ""
-        }
-      })) || [];
+          id: item.product,
+          ...item.product_detail,
+          image:
+            item.product_detail.images?.[0]?.image ||
+            item.product_detail.image ||
+            "",
+        },
+      }));
+
       setCart(items);
     } catch (err) {
       console.error(err);
-      setCart([]);
       setError(err.response?.data || err.message);
+      setCart([]);
     } finally {
       setLoading(false);
     }
@@ -48,6 +58,7 @@ export const CartProvider = ({ children }) => {
     } catch (err) {
       console.error(err);
       setError(err.response?.data || err.message);
+      throw err;
     }
   };
 
@@ -81,9 +92,18 @@ export const CartProvider = ({ children }) => {
     }
   };
 
-  const value = useMemo(() => ({
-    cart, loading, error, addToCart, updateItem, removeItem, clearCart
-  }), [cart, loading, error]);
+  const value = useMemo(
+    () => ({
+      cart,
+      loading,
+      error,
+      addToCart,
+      updateItem,
+      removeItem,
+      clearCart,
+    }),
+    [cart, loading, error]
+  );
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
 };

@@ -38,6 +38,8 @@ const ProfilePage = () => {
         setOrders(ordersRes);
         setProfile(profileRes);
 
+        setOrders(ordersRes);
+        setProfile(profileRes);
       } catch (err) {
         console.error(err);
         setError("Failed to load profile data.");
@@ -75,7 +77,6 @@ const ProfilePage = () => {
   return (
     <div className="bg-neutral-50 min-h-screen py-12">
       <div className="max-w-7xl mx-auto px-4">
-
         <div className="mb-10">
           <h1 className="text-3xl font-bold text-neutral-900">My Account</h1>
           <p className="text-neutral-500 text-sm">
@@ -84,12 +85,8 @@ const ProfilePage = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
-
-          {/* LEFT SIDEBAR */}
           <aside className="md:col-span-3">
             <div className="bg-white rounded-xl border border-neutral-200 shadow-sm sticky top-20">
-
-              {/* USER HEADER */}
               <div className="p-6 border-b">
                 <div className="relative mx-auto mb-4 w-fit">
                   <img
@@ -131,12 +128,11 @@ const ProfilePage = () => {
             </div>
           </aside>
 
-          {/* MAIN CONTENT */}
           <main className="md:col-span-9 space-y-6">
             {api.loading ? (
               <p className="text-center text-neutral-500">Loading...</p>
             ) : error ? (
-              <p className="text-center text-red-500">{error}</p>
+              <p className="text-center text-red-500">{JSON.stringify(error)}</p>
             ) : (
               <>
                 {activeTab === "orders" && <OrdersTab orders={orders} />}
@@ -157,7 +153,6 @@ const ProfilePage = () => {
               </>
             )}
           </main>
-
         </div>
       </div>
     </div>
@@ -165,3 +160,80 @@ const ProfilePage = () => {
 };
 
 export default ProfilePage;
+
+
+/* -------------------------
+   TAB COMPONENTS 
+------------------------- */
+
+const OrdersTab = ({ orders }) => (
+  <div>
+    <h2 className="text-xl font-semibold mb-4">My Orders</h2>
+    {orders.length === 0 ? (
+      <p className="text-neutral-500">No orders found.</p>
+    ) : (
+      <div className="space-y-4">
+        {orders.map((o) => (
+          <div
+            key={o.id}
+            className="p-4 bg-white border rounded-xl shadow-sm flex justify-between"
+          >
+            <div>
+              <p className="font-semibold">Order #{o.id}</p>
+              <p className="text-sm text-neutral-500">
+                {o.status || "Pending"}
+              </p>
+            </div>
+            <p className="font-semibold">${o.total_amount}</p>
+          </div>
+        ))}
+      </div>
+    )}
+  </div>
+);
+
+const ProfileTab = ({ user }) => (
+  <div>
+    <h2 className="text-xl font-semibold mb-4">Profile Details</h2>
+
+    <div className="bg-white p-6 rounded-xl border shadow-sm space-y-3">
+      <p><strong>Name:</strong> {user.first_name} {user.last_name}</p>
+      <p><strong>Email:</strong> {user.email}</p>
+      <p><strong>Phone:</strong> {user.phone || "N/A"}</p>
+    </div>
+  </div>
+);
+
+const AddressesTab = ({ address }) => (
+  <div>
+    <h2 className="text-xl font-semibold mb-4">Addresses</h2>
+
+    <div className="bg-white p-6 rounded-xl border shadow-sm space-y-3">
+      <p><strong>Street:</strong> {address.street || "N/A"}</p>
+      <p><strong>City:</strong> {address.city || "N/A"}</p>
+      <p><strong>Country:</strong> {address.country || "N/A"}</p>
+      <p><strong>Postal Code:</strong> {address.postal_code || "N/A"}</p>
+    </div>
+  </div>
+);
+
+const WalletTab = () => (
+  <div>
+    <h2 className="text-xl font-semibold mb-4">Payment Methods</h2>
+    <p className="text-neutral-500">No payment methods added yet.</p>
+  </div>
+);
+
+const WishlistTab = () => (
+  <div>
+    <h2 className="text-xl font-semibold mb-4">Wishlist</h2>
+    <p className="text-neutral-500">Your wishlist is empty.</p>
+  </div>
+);
+
+const NotificationsTab = () => (
+  <div>
+    <h2 className="text-xl font-semibold mb-4">Notifications</h2>
+    <p className="text-neutral-500">No notifications available.</p>
+  </div>
+);

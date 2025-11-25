@@ -1,5 +1,5 @@
 import { useState } from "react";
-import axiosInstance from "../api/axiosInstance"; // your central Axios instance
+import axiosInstance from "../api/axiosInstance";
 
 export const useApi = () => {
   const [loading, setLoading] = useState(false);
@@ -9,12 +9,7 @@ export const useApi = () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await axiosInstance({
-        method,
-        url,
-        data,
-        params,
-      });
+      const response = await axiosInstance({ method, url, data, params });
       return response.data;
     } catch (err) {
       setError(err.response?.data || err.message);

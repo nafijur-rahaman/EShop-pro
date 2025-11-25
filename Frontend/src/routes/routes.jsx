@@ -36,15 +36,13 @@ export default function AppRoutes() {
             </ProtectedRoute>
           }
         />
+        <Route path="/payment/:id" element={<Payment />} />
+        <Route path="/payment/success/:id" element={<PaymentSuccess />} />
+        <Route path="/payment/fail/:id" element={<PaymentFail />} />
+        <Route path="/payment/cancel/:id" element={<PaymentCancel />} />
 
-        <Route
-          path="/orders"
-          element={
-            <ProtectedRoute>
-              <Orders />
-            </ProtectedRoute>
-          }
-        />
+        <Route path="/orders" element={<MyOrders />} />
+        <Route path="/orders/:id" element={<OrderDetails />} />
 
         <Route path="/search" element={<SearchResultsPage />} />
 

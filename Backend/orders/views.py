@@ -2,7 +2,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from django.db import transaction
-
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
 from .models import CartItem, Order, OrderItem
 from .serializers import CartItemSerializer, OrderSerializer
 
@@ -62,11 +63,13 @@ class ClearCart(APIView):
         return Response({'message': 'Cart cleared'})
 
 
+
+
 # ---------------------- ORDER ---------------------- #
 class CreateOrder(APIView):
     permission_classes = [IsAuthenticated]
 
-    @transaction.atomic  # ensures atomicity
+    @transaction.atomic
     def post(self, request):
         cart_items = CartItem.objects.select_for_update().filter(user=request.user)
         if not cart_items.exists():
@@ -74,11 +77,13 @@ class CreateOrder(APIView):
 
         total = 0
         for item in cart_items:
-            if item.quantity > item.product.stock_unit:
-                return Response({'error': f'Not enough stock for {item.product.name}'}, status=400)
             total += item.product.price * item.quantity
 
-        order = Order.objects.create(user=request.user, total_amount=total)
+        order = Order.objects.create(
+            user=request.user,
+            total_amount=total,
+            payment_status='pending'
+        )
 
         for item in cart_items:
             OrderItem.objects.create(
@@ -87,13 +92,14 @@ class CreateOrder(APIView):
                 quantity=item.quantity,
                 price=item.product.price
             )
-            # decrease stock and increase sold
-            item.product.stock_unit -= item.quantity
-            item.product.sold += item.quantity
-            item.product.save()
 
         cart_items.delete()
-        return Response({'order_id': order.id, 'message': 'Order created'})
+
+        return Response({
+            'order_id': order.id,
+            'message': 'Order created'
+        })
+
 
 
 class MyOrders(APIView):
