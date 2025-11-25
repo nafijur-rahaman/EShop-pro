@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useAuth } from '../hook/useAuth';
-import { useNavigate } from 'react-router';
+import { useNavigate, Link } from 'react-router';
 
 const Login = () => {
   const { login } = useAuth(); // AuthContext login function
@@ -18,10 +18,8 @@ const Login = () => {
     try {
       // Call login from AuthContext
       await login(username, password);
-      alert('Logged in successfully!');
       navigate('/profile-page'); // redirect after successful login
     } catch (err) {
-      // Catch errors from login
       setError('Invalid credentials. Please try again.');
     } finally {
       setLoading(false);
@@ -56,7 +54,9 @@ const Login = () => {
             <div className="space-y-2">
               <div className="flex items-center justify-between">
                 <label className="text-sm font-medium leading-none">Password</label>
-                <a href="#" className="text-sm text-neutral-500 hover:text-black hover:underline">Forgot password?</a>
+                <Link to="/forgot-password" className="text-sm text-neutral-500 hover:text-black hover:underline">
+                  Forgot password?
+                </Link>
               </div>
               <input 
                 type="password" 
@@ -81,8 +81,12 @@ const Login = () => {
             </button>
           </form>
 
+          {/* Sign up link */}
           <div className="text-center text-sm text-neutral-500">
-            Don't have an account? <a href="#" className="font-semibold text-black hover:underline">Sign up</a>
+            Don't have an account?{' '}
+            <Link to="/register" className="font-semibold text-black hover:underline">
+              Sign up
+            </Link>
           </div>
         </div>
       </div>
