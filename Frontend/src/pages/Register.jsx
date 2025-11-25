@@ -1,19 +1,20 @@
-import React, { useState } from 'react';
-import { Eye, EyeOff, ArrowRight } from 'lucide-react';
-import { useNavigate } from 'react-router';
-import { useAuth } from '../hook/UseAuth';
+import React, { useState } from "react";
+import { Eye, EyeOff, ArrowRight } from "lucide-react";
+import { useNavigate } from "react-router";
+import { useAuth } from "../hook/useAuth";
+import Swal from "sweetalert2"; // ✅ Import SweetAlert2
 
 const Register = () => {
   const navigate = useNavigate();
-  const { register } = useAuth(); // AuthContext register function
+  const { register } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
-    username: '',
-    email: '',
-    password: ''
+    username: "",
+    email: "",
+    password: "",
   });
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -22,17 +23,31 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-    setError('');
+    setError("");
 
     try {
-      // Call register from AuthContext
       await register(formData.username, formData.email, formData.password);
-      alert("Account created successfully!");
-      navigate('/login'); // redirect after successful registration
+
+      // ✅ SweetAlert2 success popup
+      await Swal.fire({
+        title: "Account created successfully!",
+        icon: "success",
+        draggable: true,
+        confirmButtonText: "OK",
+      });
+
+      navigate("/login"); // Redirect after user closes the popup
     } catch (err) {
-      // Handle error from registration
       console.error(err);
       setError(err.response?.data || "Something went wrong. Please try again.");
+
+      // Optional: SweetAlert2 error popup
+      Swal.fire({
+        title: "Registration failed",
+        text: err.response?.data || "Something went wrong",
+        icon: "error",
+        confirmButtonText: "OK",
+      });
     } finally {
       setIsLoading(false);
     }
@@ -48,9 +63,10 @@ const Register = () => {
           {error && <p className="text-red-500 text-sm">{JSON.stringify(error)}</p>}
 
           <form onSubmit={handleSubmit} className="space-y-5">
+            {/* Username */}
             <div className="space-y-1.5">
               <label className="text-sm font-medium leading-none">Username</label>
-              <input 
+              <input
                 type="text"
                 name="username"
                 placeholder="johndoe"
@@ -61,9 +77,10 @@ const Register = () => {
               />
             </div>
 
+            {/* Email */}
             <div className="space-y-1.5">
               <label className="text-sm font-medium leading-none">Email Address</label>
-              <input 
+              <input
                 type="email"
                 name="email"
                 placeholder="name@example.com"
@@ -74,10 +91,11 @@ const Register = () => {
               />
             </div>
 
+            {/* Password */}
             <div className="space-y-1.5">
               <label className="text-sm font-medium leading-none">Password</label>
               <div className="relative">
-                <input 
+                <input
                   type={showPassword ? "text" : "password"}
                   name="password"
                   placeholder="••••••••"
@@ -86,7 +104,7 @@ const Register = () => {
                   className="flex h-12 w-full rounded-lg border border-neutral-200 bg-white px-3 py-2 text-sm placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-black transition-all duration-200 pr-10"
                   required
                 />
-                <button 
+                <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute right-3 top-3 text-neutral-400 hover:text-neutral-600 transition-colors"
@@ -94,10 +112,12 @@ const Register = () => {
                   {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                 </button>
               </div>
-              <p className="text-[11px] text-neutral-400 mt-1">Must be at least 8 characters.</p>
+              <p className="text-[11px] text-neutral-400 mt-1">
+                Must be at least 8 characters.
+              </p>
             </div>
 
-            <button 
+            <button
               type="submit"
               disabled={isLoading}
               className="group relative w-full h-12 flex items-center justify-center rounded-lg bg-neutral-900 text-white font-medium text-sm transition-all duration-200 hover:bg-black hover:shadow-lg disabled:opacity-70 disabled:cursor-not-allowed mt-6"
@@ -106,7 +126,11 @@ const Register = () => {
                 <span className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
               ) : (
                 <>
-                  Create Account <ArrowRight size={18} className="ml-2 group-hover:translate-x-1 transition-transform" />
+                  Create Account{" "}
+                  <ArrowRight
+                    size={18}
+                    className="ml-2 group-hover:translate-x-1 transition-transform"
+                  />
                 </>
               )}
             </button>
@@ -115,9 +139,9 @@ const Register = () => {
       </div>
 
       <div className="hidden lg:block w-1/2 relative bg-neutral-100">
-        <img 
-          src="https://images.unsplash.com/photo-1496747611176-843222e1e57c?auto=format&fit=crop&q=80&w=1600" 
-          alt="Fashion Editorial" 
+        <img
+          src="https://images.unsplash.com/photo-1496747611176-843222e1e57c?auto=format&fit=crop&q=80&w=1600"
+          alt="Fashion Editorial"
           className="absolute inset-0 w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-1000"
         />
       </div>

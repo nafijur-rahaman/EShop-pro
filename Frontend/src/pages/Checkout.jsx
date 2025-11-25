@@ -1,173 +1,189 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useApi } from "../hook/useApi";
 
-const Checkout = () => {
-  const { get, loading, error } = useApi();
-  const [product, setProduct] = useState(null);
+export default function Checkout() {
+  const { get, put, post, del, loading, error } = useApi();
+  const [cart, setCart] = useState(null);
+  const [creatingOrder, setCreatingOrder] = useState(false);
 
-  // Fetch product from API
+  // Load cart items
   useEffect(() => {
-    const fetchProduct = async () => {
+    async function fetchCart() {
       try {
-        const queryParams = new URLSearchParams(window.location.search);
-        const productId = queryParams.get("product");
-
-        if (!productId) return;
-
-        const data = await get(`products/${productId}/`); // your API endpoint
-        setProduct(data);
+        const data = await get("cart/");
+        setCart(data);
       } catch (err) {
-        console.error("Error fetching product:", err);
+        console.error(err);
       }
-    };
-
-    fetchProduct();
+    }
+    fetchCart();
   }, []);
 
-  if (loading) return <div className="flex justify-center items-center h-screen">Loading...</div>;
+  const handleQtyChange = async (itemId, newQty) => {
+    try {
+      const updatedCart = await put(`cart/item/${itemId}/`, { quantity: newQty });
+      setCart(updatedCart);
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
-  if (error || !product) {
+  const handleRemoveItem = async (itemId) => {
+    try {
+      const updatedCart = await del(`cart/item/${itemId}/`);
+      setCart(updatedCart);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const handleClearCart = async () => {
+    try {
+      await post("cart/clear/");
+      setCart({ items: [], total_price: 0 });
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const handlePlaceOrder = async () => {
+    setCreatingOrder(true);
+    try {
+      await post("order/create/", {
+        // You can add payment info & shipping here
+        payment_method: "cod",
+      });
+      alert("Order created successfully!");
+      setCart({ items: [], total_price: 0 });
+    } catch (err) {
+      console.error(err);
+      alert("Failed to create order.");
+    } finally {
+      setCreatingOrder(false);
+    }
+  };
+
+  if (loading || !cart) {
     return (
-      <div className="flex flex-col justify-center items-center h-screen text-gray-600">
-        <h2 className="text-2xl font-bold">Product not found</h2>
-        <p>{error ? JSON.stringify(error) : "No product found with that ID."}</p>
-        <a href="/" className="mt-4 text-blue-600 hover:underline">Go Back Home</a>
+      <div className="flex justify-center items-center h-screen text-xl font-semibold text-gray-600 animate-pulse">
+        Loading cart...
       </div>
     );
   }
 
-  // Calculate totals safely
-  const price = Number(product.price) || 0;
-  const shipping = 15.0;
-  const tax = price * 0.08;
-  const total = price + shipping + tax;
+  if (error) {
+    return (
+      <div className="text-center py-20 text-red-500">
+        Error loading cart: {JSON.stringify(error)}
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-6xl mx-auto">
-        <h1 className="text-3xl font-bold text-gray-900 mb-8">Checkout</h1>
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-x-12 gap-y-10">
-          
-          {/* LEFT COLUMN: Form Fields */}
-          <div className="lg:col-span-7 space-y-8">
-            {/* Contact Info */}
-            <section className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4">Contact Information</h2>
-              <div className="grid grid-cols-1 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">Email Address</label>
-                  <input type="email" placeholder="you@example.com" className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500" />
-                </div>
-              </div>
-            </section>
+        <h1 className="text-4xl font-bold mb-10 flex items-center gap-2">
+          <span className="w-2 h-8 bg-indigo-500 rounded-full"></span>
+          Checkout
+        </h1>
 
-            {/* Shipping Address */}
-            <section className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4">Shipping Address</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="col-span-1 md:col-span-2">
-                  <label className="block text-sm font-medium text-gray-700">Full Name</label>
-                  <input type="text" className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500" />
-                </div>
-                <div className="col-span-1 md:col-span-2">
-                  <label className="block text-sm font-medium text-gray-700">Address</label>
-                  <input type="text" className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500" />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">City</label>
-                  <input type="text" className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500" />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">Postal Code</label>
-                  <input type="text" className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500" />
-                </div>
-              </div>
-            </section>
+        {cart.items.length === 0 ? (
+          <div className="text-gray-500 text-lg text-center">Your cart is empty.</div>
+        ) : (
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
 
-            {/* Payment */}
-            <section className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4">Payment Details</h2>
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">Card Number</label>
-                  <input type="text" placeholder="0000 0000 0000 0000" className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500" />
-                </div>
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700">Expiration Date (MM/YY)</label>
-                    <input type="text" placeholder="MM/YY" className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500" />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700">CVC</label>
-                    <input type="text" placeholder="123" className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500" />
-                  </div>
-                </div>
-              </div>
-            </section>
-
-            <button className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-lg shadow-lg transition duration-200">
-              Confirm Order (${total.toFixed(2)})
-            </button>
-          </div>
-
-          {/* RIGHT COLUMN: Order Summary */}
-          <div className="lg:col-span-5">
-            <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-200 sticky top-6">
-              <h2 className="text-lg font-medium text-gray-900 mb-6">Order Summary</h2>
-
-              <div className="flex gap-4 mb-6 pb-6 border-b border-gray-100">
-                {product.image ? (
-                  <div className="h-20 w-20 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
-                    <img src={product.image} alt={product.name} className="h-full w-full object-cover object-center" />
-                  </div>
-                ) : (
-                  <div className="h-20 w-20 flex-shrink-0 rounded-md border border-gray-200 flex items-center justify-center bg-gray-200">No Image</div>
-                )}
-
-                <div className="flex flex-1 flex-col">
-                  <div>
-                    <div className="flex justify-between text-base font-medium text-gray-900">
-                      <h3>{product.name}</h3>
-                      <p className="ml-4">${price.toFixed(2)}</p>
+            {/* Cart Items / Left Column */}
+            <div className="lg:col-span-7 space-y-6">
+              {cart.items.map((item) => (
+                <div key={item.id} className="flex items-center justify-between bg-white p-4 rounded-2xl shadow hover:shadow-lg transition">
+                  <div className="flex items-center gap-4">
+                    <div className="w-20 h-20 rounded-xl overflow-hidden border border-gray-200">
+                      <img
+                        src={item.product_image || "https://via.placeholder.com/150"}
+                        alt={item.product_name}
+                        className="w-full h-full object-cover"
+                      />
                     </div>
-                    <p className="mt-1 text-sm text-gray-500">{product.description}</p>
+                    <div className="flex flex-col">
+                      <span className="font-semibold text-gray-900">{item.product_name}</span>
+                      <span className="text-gray-500 text-sm line-clamp-2">{item.description}</span>
+                    </div>
                   </div>
-                  <div className="flex flex-1 items-end justify-between text-sm">
-                    <p className="text-gray-500">Qty 1</p>
-                  </div>
-                </div>
-              </div>
 
-              <div className="space-y-4">
-                <div className="flex justify-between text-base text-gray-600">
-                  <p>Subtotal</p>
-                  <p>${price.toFixed(2)}</p>
-                </div>
-                <div className="flex justify-between text-base text-gray-600">
-                  <p>Shipping</p>
-                  <p>${shipping.toFixed(2)}</p>
-                </div>
-                <div className="flex justify-between text-base text-gray-600">
-                  <p>Tax</p>
-                  <p>${tax.toFixed(2)}</p>
-                </div>
-
-                <div className="border-t border-gray-200 pt-4 flex justify-between items-center">
-                  <p className="text-lg font-bold text-gray-900">Total</p>
-                  <div className="text-right">
-                    <p className="text-xl font-bold text-gray-900">${total.toFixed(2)}</p>
-                    <p className="text-xs text-gray-500">Including taxes</p>
+                  <div className="flex items-center gap-3">
+                    <input
+                      type="number"
+                      min="1"
+                      value={item.quantity}
+                      onChange={(e) => handleQtyChange(item.id, Number(e.target.value))}
+                      className="w-16 border rounded px-2 py-1 text-center"
+                    />
+                    <span className="font-semibold text-gray-900">${item.total_price}</span>
+                    <button
+                      onClick={() => handleRemoveItem(item.id)}
+                      className="text-red-500 hover:underline"
+                    >
+                      Remove
+                    </button>
                   </div>
                 </div>
-              </div>
+              ))}
 
+              <button
+                onClick={handleClearCart}
+                className="text-red-500 hover:underline mt-2"
+              >
+                Clear Cart
+              </button>
             </div>
-          </div>
 
-        </div>
+            {/* Order Summary / Right Column */}
+            <div className="lg:col-span-5">
+              <div className="bg-white p-6 rounded-2xl shadow-xl border border-gray-200 sticky top-6">
+                <h2 className="text-xl font-semibold text-gray-900 mb-6">Order Summary</h2>
+
+                <div className="space-y-4">
+                  <div className="flex justify-between text-gray-700">
+                    <span>Subtotal</span>
+                    <span>${cart.items.reduce((a, i) => a + i.total_price, 0)}</span>
+                  </div>
+                  <div className="flex justify-between text-gray-700">
+                    <span>Shipping</span>
+                    <span>$15.00</span>
+                  </div>
+                  <div className="flex justify-between text-gray-700">
+                    <span>Tax</span>
+                    <span>
+                      ${cart.items.reduce((a, i) => a + i.total_price, 0) * 0.08}
+                    </span>
+                  </div>
+
+                  <div className="border-t pt-4 flex justify-between items-center">
+                    <span className="text-lg font-bold text-gray-900">Total</span>
+                    <span className="text-2xl font-bold text-gray-900">
+                      $
+                      {(
+                        cart.items.reduce((a, i) => a + i.total_price, 0) +
+                        15 +
+                        cart.items.reduce((a, i) => a + i.total_price, 0) * 0.08
+                      ).toFixed(2)}
+                    </span>
+                  </div>
+
+                  <button
+                    onClick={handlePlaceOrder}
+                    disabled={creatingOrder}
+                    className="w-full mt-4 bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-bold py-3 rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all"
+                  >
+                    {creatingOrder ? "Processing…" : "Place Order"}
+                  </button>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        )}
       </div>
     </div>
   );
-};
-
-export default Checkout;
+}
