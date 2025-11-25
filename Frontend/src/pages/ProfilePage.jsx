@@ -10,44 +10,41 @@ import {
   ChevronRight,
   Bell,
 } from "lucide-react";
+
 import { useAuth } from "../hook/useAuth";
-import axiosInstance from "../api/axiosInstance";
+import { useApi } from "../hook/useApi";   // <-- NEW HOOK
 
 const ProfilePage = () => {
   const { user, logout } = useAuth();
+  const api = useApi(); // <-- initialize API wrapper
 
   const [activeTab, setActiveTab] = useState("orders");
   const [orders, setOrders] = useState([]);
   const [profile, setProfile] = useState({});
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
   useEffect(() => {
     if (!user) return;
 
-    const fetchData = async () => {
-      setLoading(true);
+    const fetchAll = async () => {
       setError("");
 
       try {
-        // GET Orders
-        const ordersRes = await axiosInstance.get("orders/");
+        const [ordersRes, profileRes] = await Promise.all([
+          api.get("orders/"),
+          api.get("profile/"),
+        ]);
 
-        // GET User Profile (contains address details)
-        const profileRes = await axiosInstance.get("profile/");
-
-        setOrders(ordersRes.data);
-        setProfile(profileRes.data);
+        setOrders(ordersRes);
+        setProfile(profileRes);
 
       } catch (err) {
         console.error(err);
         setError("Failed to load profile data.");
-      } finally {
-        setLoading(false);
       }
     };
 
-    fetchData();
+    fetchAll();
   }, [user]);
 
   const TabButton = ({ id, icon: Icon, label }) => (
@@ -79,7 +76,6 @@ const ProfilePage = () => {
     <div className="bg-neutral-50 min-h-screen py-12">
       <div className="max-w-7xl mx-auto px-4">
 
-        {/* PAGE HEADER */}
         <div className="mb-10">
           <h1 className="text-3xl font-bold text-neutral-900">My Account</h1>
           <p className="text-neutral-500 text-sm">
@@ -114,7 +110,7 @@ const ProfilePage = () => {
                 </p>
               </div>
 
-              {/* NAVIGATION TABS */}
+              {/* NAVIGATION */}
               <nav className="p-2 space-y-1">
                 <TabButton id="orders" icon={Package} label="My Orders" />
                 <TabButton id="profile" icon={User} label="Profile Details" />
@@ -124,7 +120,6 @@ const ProfilePage = () => {
                 <TabButton id="notifications" icon={Bell} label="Notifications" />
               </nav>
 
-              {/* LOGOUT BUTTON */}
               <div className="p-2 border-t">
                 <button
                   onClick={logout}
@@ -138,16 +133,14 @@ const ProfilePage = () => {
 
           {/* MAIN CONTENT */}
           <main className="md:col-span-9 space-y-6">
-            {loading ? (
+            {api.loading ? (
               <p className="text-center text-neutral-500">Loading...</p>
             ) : error ? (
               <p className="text-center text-red-500">{error}</p>
             ) : (
               <>
                 {activeTab === "orders" && <OrdersTab orders={orders} />}
-
                 {activeTab === "profile" && <ProfileTab user={profile} />}
-
                 {activeTab === "addresses" && (
                   <AddressesTab
                     address={{
@@ -158,7 +151,6 @@ const ProfilePage = () => {
                     }}
                   />
                 )}
-
                 {activeTab === "wallet" && <WalletTab />}
                 {activeTab === "wishlist" && <WishlistTab />}
                 {activeTab === "notifications" && <NotificationsTab />}
