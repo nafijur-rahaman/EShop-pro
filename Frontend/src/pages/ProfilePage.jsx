@@ -16,7 +16,9 @@ import { useApi } from "../hook/useApi";   // <-- NEW HOOK
 
 const ProfilePage = () => {
   const { user, logout } = useAuth();
-  const api = useApi(); // <-- initialize API wrapper
+  const api = useApi(); 
+
+ 
 
   const [activeTab, setActiveTab] = useState("orders");
   const [orders, setOrders] = useState([]);
@@ -90,7 +92,7 @@ const ProfilePage = () => {
               <div className="p-6 border-b">
                 <div className="relative mx-auto mb-4 w-fit">
                   <img
-                    src={profile.avatar || "https://via.placeholder.com/80"}
+                    src={"/images/user.jpeg" || "https://via.placeholder.com/80"}
                     alt="User Avatar"
                     className="w-20 h-20 rounded-full object-cover border shadow"
                   />
@@ -102,19 +104,14 @@ const ProfilePage = () => {
                 <h3 className="text-lg font-bold">
                   {profile.first_name} {profile.last_name}
                 </h3>
-                <p className="text-xs text-neutral-500 mt-1">
-                  {profile.membership || "Member"}
-                </p>
+
               </div>
 
               {/* NAVIGATION */}
               <nav className="p-2 space-y-1">
                 <TabButton id="orders" icon={Package} label="My Orders" />
                 <TabButton id="profile" icon={User} label="Profile Details" />
-                <TabButton id="addresses" icon={MapPin} label="Addresses" />
-                <TabButton id="wallet" icon={CreditCard} label="Payment Methods" />
-                <TabButton id="wishlist" icon={Heart} label="Wishlist" />
-                <TabButton id="notifications" icon={Bell} label="Notifications" />
+
               </nav>
 
               <div className="p-2 border-t">
@@ -197,43 +194,15 @@ const ProfileTab = ({ user }) => (
     <h2 className="text-xl font-semibold mb-4">Profile Details</h2>
 
     <div className="bg-white p-6 rounded-xl border shadow-sm space-y-3">
-      <p><strong>Name:</strong> {user.first_name} {user.last_name}</p>
+      <p><strong>Name:</strong> {user.username}</p>
       <p><strong>Email:</strong> {user.email}</p>
       <p><strong>Phone:</strong> {user.phone || "N/A"}</p>
     </div>
   </div>
 );
 
-const AddressesTab = ({ address }) => (
-  <div>
-    <h2 className="text-xl font-semibold mb-4">Addresses</h2>
 
-    <div className="bg-white p-6 rounded-xl border shadow-sm space-y-3">
-      <p><strong>Street:</strong> {address.street || "N/A"}</p>
-      <p><strong>City:</strong> {address.city || "N/A"}</p>
-      <p><strong>Country:</strong> {address.country || "N/A"}</p>
-      <p><strong>Postal Code:</strong> {address.postal_code || "N/A"}</p>
-    </div>
-  </div>
-);
 
-const WalletTab = () => (
-  <div>
-    <h2 className="text-xl font-semibold mb-4">Payment Methods</h2>
-    <p className="text-neutral-500">No payment methods added yet.</p>
-  </div>
-);
 
-const WishlistTab = () => (
-  <div>
-    <h2 className="text-xl font-semibold mb-4">Wishlist</h2>
-    <p className="text-neutral-500">Your wishlist is empty.</p>
-  </div>
-);
 
-const NotificationsTab = () => (
-  <div>
-    <h2 className="text-xl font-semibold mb-4">Notifications</h2>
-    <p className="text-neutral-500">No notifications available.</p>
-  </div>
-);
+
