@@ -1,40 +1,32 @@
-
-import { createBrowserRouter } from "react-router";
+import { Routes, Route, Navigate } from "react-router";
 import HomeLayout from "../layout/HomeLayout";
-import Homepage from "../pages/Homepage";
-import AllProducts from "../pages/AllProducts";
+import AdminDashboard from "../pages/admin/AdminDashboard";
+
+import Home from "../pages/Home";
+import CategoryProducts from "../pages/CategoryProducts";
 import ProductDetails from "../pages/ProductDetails";
-import ProfilePage from "../pages/ProfilePage";
+import Cart from "../pages/Cart";
+import Checkout from "../pages/Checkout";
+import Orders from "../pages/Orders";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
 
+export default function AppRoutes() {
+  return (
+    <Routes>
+      <Route element={<HomeLayout />}>
+        <Route path="/" element={<Home />} />
+        <Route path="/category/:id" element={<CategoryProducts />} />
+        <Route path="/category" element={<Navigate to="/" />} /> {/* fallback */}
+        <Route path="/product/:id" element={<ProductDetails />} />
+        <Route path="/cart" element={<Cart />} />
+        <Route path="/checkout" element={<Checkout />} />
+        <Route path="/orders" element={<Orders />} />
+      </Route>
 
-export const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <HomeLayout></HomeLayout>,
-    children: [
-      {
-        path: "/",
-        element: <Homepage></Homepage>,
-      },
-      {
-        path: "/all-products",
-        element: <AllProducts></AllProducts>
-      },{
-        path: "/product-details",
-        element:<ProductDetails></ProductDetails>
-      },
-      {
-        path: "/profile-page",
-        element: <ProfilePage></ProfilePage>
-      },{
-        path: "/login",
-        element: <Login></Login>
-      },{
-        path: "/register",
-        element: <Register></Register>
-      }
-    ],
-  },
-]);
+      <Route path="/admin" element={<AdminDashboard />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
+    </Routes>
+  );
+}
